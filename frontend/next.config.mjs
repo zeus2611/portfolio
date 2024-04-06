@@ -20,6 +20,12 @@ const nextConfig = {
         port: '',
         pathname: '/logos/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+        pathname: '/zeus2611/**',
+      },
     ],
   },
 };
