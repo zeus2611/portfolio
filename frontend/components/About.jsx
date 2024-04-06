@@ -63,71 +63,61 @@ const qualificationData = [
 
 const skillsData = [
   {
-    title: 'clouds platforms',
+    title: 'skills',
     data: [
       {
-        name: 'Amazon Web Services (AWS)',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
       },
       {
-        name: 'Google Cloud Platform (GCP)',
-      }
-    ]
-  },
-  {
-    title: 'DevOps',
-    data: [
-      {
-        name: 'Terraform',
+        imgPath: 'https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg',
       },
       {
-        name: 'Kubernetes',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg',
       },
       {
-        name: 'Ansible',
-      }
-    ]
-  },
-  {
-    title: 'Programming Languages',
-    data: [
-      {
-        name: 'Python',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg',
       },
       {
-        name: 'C++',
-      }
-    ]
-  },
-  {
-    title: 'CI/CD',
-    data: [
-      {
-        name: 'Jenkins',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg',
       },
       {
-        name: 'GitHub Actions',
-      }
-    ]
-  },
-  {
-    title: 'Database',
-    data: [
-      {
-        name: 'Cloud SQL',
+        imgPath: 'https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg',
       },
       {
-        name: 'BigQuery',
-      }
-    ]
-  },
-  {
-    title: 'Tools',
-    data: [
-      {
-        name: 'Bash Scripting',
+        imgPath: 'https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg',
       },
       {
-        name: 'Docker',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original.svg',
+      },
+      {
+        imgPath: 'https://www.vectorlogo.zone/logos/grafana/grafana-icon.svg',
+      },
+      {
+        imgPath: 'https://www.vectorlogo.zone/logos/kubernetes/kubernetes-icon.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/githubactions/githubactions-original.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/helm/helm-original.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/prometheus/prometheus-original.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/terraform/terraform-original.svg',
       }
     ]
   },
@@ -135,13 +125,19 @@ const skillsData = [
     title: 'tools',
     data: [
       {
-        imgPath: '/about/vscode.svg',
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg',
       },
       {
-        imgPath: '/about/figma.svg',
+        imgPath: 'https://www.vectorlogo.zone/logos/figma/figma-icon.svg',
       },
       {
-        imgPath: '/about/notion.svg',
+        imgPath: 'https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg',
+      },
+      {
+        imgPath: 'https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg',
+      },
+      {
+        imgPath: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg',
       }
     ]
   },
@@ -287,23 +283,24 @@ const About = () => {
                   <div className="text-center xl:text-left">
                     <h3 className="h3 mb-8">What I Use Everyday</h3>
                     {/*cloud providers*/}
-                    <div className="mb-16">
+                    <div className="mb-8">
                       <h4 className="text-xl font-semibold mb-2 capitalize">
                         skills
                       </h4>
-                      <div className="border-b border-border mb-4"></div>
+                      <div className="border-b border-border mb-2"></div>
                       {/*cloud providers list*/}
-                      <div>
-                        {getData(skillsData, 'clouds platforms').data.map((item, index) => {
-                          const { name } = item;
+                      <div className="text-lg xl:mt-4 mt-2 grid grid-cols-1 lg:grid-cols-8 gap-6">
+                        {getData(skillsData, 'skills').data.map((item, index) => {
+                          const { imgPath } = item;
                           return (
-                            <div
-                              className="w-2/4 text-center xl:text-left mx-auto xl:mx-0"
-                              key={index}
-                            >
-                              <div className="font-medium">
-                                {name}
-                              </div>
+                            <div key={index}>
+                              <Image
+                                src={imgPath}
+                                width={48}
+                                height={48}
+                                alt=""
+                                priority
+                              />
                             </div>
                           );
                         })}
