@@ -1,0 +1,64 @@
+---
+title: "Serverless Audio Processing with AI on Google Cloud"
+publishedAt: "2024-04-01"
+summary: "Dive into the world of serverless AI and discover how we transformed audio files into actionable insights using cutting-edge technology on GCP."
+images:
+  - "/images/projects/project-01/cover-01.jpg"
+  - "/images/projects/project-01/image-02.jpg"
+team:
+  - name: "Nischay"
+    role: "Software Engineer"
+    avatar: "/images/avatar.svg"
+    linkedIn: "https://www.linkedin.com/company/once-ui/"
+link: "https://journll.app/"
+---
+
+## Overview
+
+Imagine uploading an audio file and receiving a polished transcript and concise summary in seconds—no servers, no hassle. This project brings that vision to life with a **serverless AI-powered pipeline on Google Cloud Platform (GCP)**. From transcription to summarization, every step is automated, enabling users to focus on insights rather than infrastructure.
+
+---
+
+## Key Features
+
+* **Effortless audio-to-text transformation**: Upload audio files and instantly receive transcripts and summaries.
+* **Serverless magic**: A fully automated architecture that scales seamlessly without manual intervention.
+* **AI-driven intelligence**: Leverages Deepgram for precise transcription and Gemini for insightful summarization.
+* **Dynamic user experience**: Real-time updates via a Flutter-powered frontend connected to Firebase.
+* **Secure and organized processing**: Metadata-driven access control ensures user data is handled safely and efficiently.
+
+---
+
+## Technology Stack
+
+* **Frontend**: Flutter for a sleek UI, Firebase Auth for authentication, Firebase Storage for uploads, and Firestore for real-time data.
+* **Backend**:
+
+  * Google Cloud Functions (Python) for event-driven processing
+  * Google Cloud Storage for file triggers
+  * Firestore for structured data storage
+  * Deepgram API for transcription
+  * Gemini via Vertex AI for summarization
+* **Dev Tools**: Firebase CLI, GCP SDK, Python SDKs (`google-cloud`, `deepgram`, `vertexai`)
+
+---
+
+## Challenges and Insights
+
+* **Mastering event-driven workflows**: Debugging GCS-triggered functions and parsing metadata required creative problem-solving.
+* **Securing integrations**: Implemented signed URLs and authenticated API calls to safeguard sensitive data.
+* **Balancing cost and performance**: Fine-tuned LLM configurations to optimize output quality while managing API expenses.
+* **Scalable Firestore design**: Built user-specific subcollections for efficient and secure data storage.
+
+---
+
+## Impact
+
+* Delivered a robust, serverless pipeline capable of processing audio files at scale.
+* Automated transcription and summarization, saving users hours of manual effort.
+* Created a production-ready architecture that supports high concurrency without server management.
+* Gained valuable experience in integrating AI APIs into GCP workflows.
+
+## Try It Yourself
+
+- [TBA]

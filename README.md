@@ -1,80 +1,94 @@
-# Portfolio Project
+# **Magic Portfolio by Once UI**
 
-Welcome to my portfolio project! This project demonstrates my skills in deploying a full-fledged application consisting of multiple microservices. Using Next.js for the frontend, Go for backend microservices, and MongoDB as the database, this project showcases my proficiency in orchestrating the deployment process using cloud-native technologies and best practices.
+View the [demo here](https://demo.magic-portfolio.com).
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
+![Magic Portfolio](https://demo.magic-portfolio.com/images/og/home.jpg)
 
-## Introduction
 
-This project aims to showcase my DevOps skills by orchestrating the deployment process of a full-fledged application with multiple microservices. The frontend, backend microservices, and database components are seamlessly integrated and deployed using cloud-native technologies.
+# **Getting started**
 
-## Features
+Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
 
-- **Responsive Design**: The frontend is designed to be responsive, providing an optimal viewing experience across various devices and screen sizes.
-- **Dynamic Data Rendering**: The backend API fetches data from MongoDB and serves it to the frontend, enabling dynamic rendering of portfolio content such as projects, skills, and contact information.
-- **Authentication and Authorization (optional)**: Secure authentication and authorization mechanisms can be implemented to restrict access to certain parts of the portfolio.
-- **Scalable Architecture**: The project architecture is designed to be scalable, allowing for easy expansion and addition of new features in the future.
+**1. Clone the repository**
+```
+git clone https://github.com/once-ui-system/magic-portfolio.git
+```
 
-## Installation
+**2. Install dependencies**
+```
+npm install
+```
 
-To run this project locally, follow these steps:
+**3. Run dev server**
+```
+npm run dev
+```
 
-1. Clone this repository to your local machine.
-2. Navigate to the project directory.
-3. Install dependencies for both the frontend and backend:
-   ```bash
-   cd frontend
-   npm install
-   cd ../backend
-   go mod tidy
-   ```
-4. Set up the MongoDB database and create a .env file in backend folder.
-   ```bash
-   echo "MONGOURI=<MONGODB_CONNECTION_STRING>" >> .env
-   ```
-6. Start the frontend and backend servers:
-   ```bash
-   cd frontend
-   npm run dev
-   cd ../backend
-   go run main.go
-   ```
-7. Access the application in your web browser at `http://localhost:3000`.
+**4. Edit config**
+```
+src/app/resources/config
+```
 
-## Usage
+**5. Edit content**
+```
+src/app/resources/content
+```
 
-Once the application is running, you can navigate through the various pages of the portfolio to view different sections such as projects, skills, and contact information. The frontend communicates with the backend API to fetch and display dynamic data from the MongoDB database.
+**6. Create blog posts / projects**
+```
+Add a new .mdx file to src/app/blog/posts or src/app/work/projects
+```
 
-## Technologies Used
+# **Documentation**
 
-- **Frontend**: Next.js
-- **Backend**: Go (Golang)
-- **Database**: MongoDB
-- **Deployment**: Google Cloud Run, Terraform, GitHub Actions
+Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
 
-## Deployment
+# **Features**
 
-This project is deployed using Google Cloud Run. Deployment is automated using Terraform for infrastructure provisioning and GitHub Actions for continuous integration and deployment.
+## **Once UI**
+- All tokens, components & features of [Once UI](https://once-ui.com)
 
-### Steps for Deployment:
+## **SEO**
+- Automatic open-graph and X image generation with next/og
+- Automatic schema and metadata generation based on the content file
 
-1. Configure your Google Cloud credentials and project.
-2. Set up a MongoDB instance on Google Cloud or use an existing one.
-3. Create a Terraform configuration to define the Cloud Run service, networking, and IAM policies.
-4. Set up GitHub Actions workflows to build and deploy the application automatically on every push to the main branch.
+## **Design**
+- Responsive layout optimized for all screen sizes
+- Timeless design without heavy animations and motion
+- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
 
-## Contributing
+## **Content**
+- Render sections conditionally based on the content file
+- Enable or disable pages for blog, work, gallery and about / CV
+- Generate and display social links automatically
+- Set up password protection for URLs
 
-Contributions are welcome! If you have any suggestions, bug fixes, or feature implementations, feel free to open an issue or create a pull request.
+## **Localization**
+- A localized version of Magic Portfolio is available with the next-intl library
+- To use localization, switch to the 'i18n' branch
 
-## License
+# **Authors**
 
-This project is licensed under the [MIT License](LICENSE). Feel free to use and modify the code as per your requirements.
+Connect with us on Threads or LinkedIn.
+
+Lorant Toth: [Threads](https://www.threads.net/@lorant.one), [LinkedIn](https://www.linkedin.com/in/tothlorant/)  
+Zsofia Komaromi: [Threads](https://www.threads.net/@zsofia_kom), [LinkedIn](https://www.linkedin.com/in/zsofiakomaromi/)
+
+Localization added by [François Hernandez](https://github.com/francoishernandez)
+
+# **Get involved**
+
+- Join the [Design Engineers Club on Discord](https://discord.com/invite/5EyAQ4eNdS) and share your portfolio with us!
+- Report a [bug](https://github.com/once-ui-system/magic-portfolio/issues/new?labels=bug&template=bug_report.md).
+
+# **License**
+
+Distributed under the CC BY-NC 4.0 License.
+- Commercial usage is not allowed.
+- Attribution is required.
+- You can extend the license to commercial use by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
+
+See `LICENSE.txt` for more information.
+
+# **Deploy with Vercel**
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
