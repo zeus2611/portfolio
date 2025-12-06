@@ -2,9 +2,9 @@ const person = {
   firstName: "Nischay",
   lastName: "",
   get name() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.firstName}`;
   },
-  role: "Cloud & Software Engineer",
+  role: "Software Engineer (AI & Distributed Systems)",
   avatar: "/images/avatar.svg",
   email: "itsnischay2604@gmail.com",
   location: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
@@ -43,23 +43,27 @@ const home = {
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
   headline: (
-    <>Fusing user-centric design with cutting-edge AI and cloud solutions.</>
+    <>
+      Engineering resilient, scalable systems with a focus on product impact and
+      user experience.
+    </>
   ),
   featured: {
     display: true,
     title: (
       <>
-        Recent project: <strong className="ml-4">Once UI</strong>
+        Recent project: <strong className="ml-4">BridgeTalk</strong>
       </>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work/building-an-ai-powered-learning-platform",
   },
   subline: (
     <>
-      I'm {person.name}, a Cloud + AI Engineer BridgeTalk, where I craft intelligent,
-      scalable AI-powered systems and seamless mobile-first experiences. After
-      hours, I build my own innovative projects that push the boundaries of AI,
-      cloud, and mobile technologies.
+      I'm {person.name}, a Product Engineer who translates ambitious technical
+      challenges into reliable, user-centric software. Currently leading
+      engineering initiatives at BridgeTalk, I specialize in building
+      production-grade systems—from automating cloud workflows to designing
+      responsive interfaces.
     </>
   ),
 };

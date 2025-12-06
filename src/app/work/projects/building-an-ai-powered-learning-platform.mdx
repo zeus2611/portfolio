@@ -1,0 +1,82 @@
+---
+title: "BridgeTalk: AI-Powered Interview Preparation Platform"
+publishedAt: "2025-01-01"
+summary: "Built a production-grade interview preparation platform with real-time AI assessment, processing thousands of user responses across TOEFL and IELTS exams on mobile and web."
+images:
+  - "/images/projects/bridgetalk/cover-01.jpg"
+  - "/images/projects/bridgetalk/dashboard-02.jpg"
+  - "/images/projects/bridgetalk/mobile-03.jpg"
+team:
+  - name: "Nischay"
+    role: "Backend Engineer & Integration Lead"
+    avatar: "/images/avatar.svg"
+    linkedIn: "https://www.linkedin.com/in/your-profile/"
+link: "https://bridgetalk.ai/"
+---
+
+## Overview
+
+BridgeTalk transforms exam preparation with an AI-powered platform that simulates real interview scenarios for TOEFL and IELTS candidates [memory:6]. Users interact with dynamic video avatars, receive real-time transcription of their responses, and get personalized assessments powered by GPT—all through a seamless mobile and web experience. As the backend architect, I engineered a dual-architecture system supporting both B2B (institutions) and B2C (individual learners) use cases across iOS, Android, and web platforms.
+
+---
+
+## Key Features
+
+* **Realistic exam simulation**: Interactive video avatars and cue cards that mirror actual TOEFL/IELTS speaking test formats
+* **Real-time audio processing**: Asynchronous transcription pipeline that processes user responses while they continue with subsequent questions
+* **Intelligent assessment engine**: Context-aware GPT-powered evaluations that provide personalized feedback based on question types and user performance
+* **Dual architecture design**: Separate B2B (Appwrite) and B2C (Firebase) backends optimized for institutional and individual user needs
+* **Cross-platform availability**: Production apps on Google Play Store, Apple App Store, plus web dashboard for B2B instructors
+
+---
+
+## Technology Stack
+
+* **Backend**:
+  * FastAPI (Python) for REST API endpoints
+  * Appwrite (B2B): Database, authentication, and storage for institutional deployments
+  * Firebase (B2C): Auth, Firestore, Cloud Functions, and Storage for individual users
+  * Deepgram API for real-time speech-to-text transcription
+  * OpenAI GPT for assessment generation with custom evaluation prompts
+  * Google Cloud Platform for cloud infrastructure
+
+* **Frontend Integration**: Flutter (iOS, Android, web) with REST API integration
+* **Infrastructure**: Multi-region deployment supporting concurrent exam sessions
+
+---
+
+## Architecture Highlights
+
+* **Session management system**: Implemented chat-based conversation threading that groups related questions, enabling contextual assessment across multi-part exams
+* **Asynchronous processing pipeline**: Decoupled audio transcription from user interaction flow—responses process in background while users advance to next questions
+* **Dual BaaS strategy**: Architected separate backend implementations (Appwrite for B2B, Firebase for B2C) to optimize for different scaling and feature requirements
+* **API design**: Built RESTful endpoints for exam selection, question fetching, audio upload, transcription retrieval, and assessment generation
+* **Real-time data flow**: Engineered request/response cycle from audio capture → Cloud Storage → Deepgram transcription → Firestore/Appwrite storage → GPT assessment
+
+---
+
+## Challenges and Insights
+
+* **Managing real-time constraints**: Designed asynchronous workflows to prevent transcription latency from blocking user progress through exam sections
+* **Integrating multiple AI services**: Orchestrated Deepgram and GPT APIs with proper error handling, retry logic, and cost optimization strategies
+* **Dual architecture complexity**: Maintained feature parity across Appwrite and Firebase backends while adapting to each platform's unique SDK patterns
+* **Context preservation**: Implemented chat ID-based threading to maintain conversation history for accurate, holistic assessments across multi-question sessions
+* **Cross-platform API consistency**: Ensured seamless frontend integration across iOS, Android, and web clients with unified API contracts
+
+---
+
+## Impact
+
+* Delivered production-ready platform serving users across iOS, Android, and web simultaneously
+* Enabled B2B institutions to manage student cohorts through dedicated instructor dashboard
+* Automated assessment workflow that provides instant, personalized feedback—eliminating hours of manual evaluation
+* Architected scalable backend capable of handling concurrent exam sessions with real-time audio processing
+* Gained deep expertise in multi-cloud architecture, AI API integration, and production mobile backend development
+
+---
+
+## Try It Yourself
+
+- **Google Play Store**: [Download for Android](https://play.google.com/store/apps/details?id=com.bridgetalk.app)
+- **Apple App Store**: [Download for iOS](https://apps.apple.com/app/bridgetalk)
+- **Web Platform**: [Visit BridgeTalk](https://www.bridgetalk.ai/)
