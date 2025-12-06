@@ -1,14 +1,14 @@
 import { home } from "./content";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL = "https://demo.magic-portfolio.com";
+const baseURL = "https://www.nischay.live";
 
 const routes = {
   "/": true,
   "/about": true,
   "/work": true,
   "/blog": true,
-  "/gallery": true,
+  "/gallery": false,
 };
 
 const display = {
@@ -180,4 +180,39 @@ const schema = {
   email: "lorant@once-ui.com",
 };
 
-export { display, mailchimp, routes, protectedRoutes, baseURL, fonts, style, schema, effects, dataStyle };
+const sameAs = {
+  threads: "https://www.threads.com/@once_ui",
+  linkedin: "https://www.linkedin.com/company/once-ui/",
+  discord: "https://discord.com/invite/5EyAQ4eNdS",
+};
+
+// /** @type {import("@/types").SocialSharingConfig} */
+const socialSharing = {
+  display: true,
+  platforms: {
+    x: true,
+    linkedin: true,
+    facebook: false,
+    pinterest: false,
+    whatsapp: false,
+    reddit: false,
+    telegram: false,
+    email: true,
+    copyLink: true,
+  },
+};
+
+export {
+  display,
+  mailchimp,
+  routes,
+  protectedRoutes,
+  baseURL,
+  fonts,
+  style,
+  schema,
+  sameAs,
+  socialSharing,
+  effects,
+  dataStyle,
+};
