@@ -1,6 +1,17 @@
 import { notFound } from "next/navigation";
 import { getPosts } from "@/utils/utils";
-import { Meta, Schema, AvatarGroup, Button, Column, Flex, Heading, Media, Text } from "@once-ui-system/core";
+import {
+  Meta,
+  Schema,
+  AvatarGroup,
+  Button,
+  Column,
+  Flex,
+  Heading,
+  Media,
+  Text,
+  Carousel,
+} from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
@@ -19,9 +30,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string | string[] }>;
 }): Promise<Metadata> {
   const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug) ? routeParams.slug.join('/') : routeParams.slug || '';
+  const slugPath = Array.isArray(routeParams.slug)
+    ? routeParams.slug.join("/")
+    : routeParams.slug || "";
 
-  const posts = getPosts(["src", "app", "work", "projects"])
+  const posts = getPosts(["src", "app", "work", "projects"]);
   let post = posts.find((post) => post.slug === slugPath);
 
   if (!post) return {};
@@ -30,18 +43,25 @@ export async function generateMetadata({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+    image:
+      post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
     path: `${work.path}/${post.slug}`,
   });
 }
 
 export default async function Project({
-  params
-}: { params: Promise<{ slug: string | string[] }> }) {
+  params,
+}: {
+  params: Promise<{ slug: string | string[] }>;
+}) {
   const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug) ? routeParams.slug.join('/') : routeParams.slug || '';
+  const slugPath = Array.isArray(routeParams.slug)
+    ? routeParams.slug.join("/")
+    : routeParams.slug || "";
 
-  let post = getPosts(["src", "app", "work", "projects"]).find((post) => post.slug === slugPath);
+  let post = getPosts(["src", "app", "work", "projects"]).find(
+    (post) => post.slug === slugPath
+  );
 
   if (!post) {
     notFound();
@@ -53,7 +73,7 @@ export default async function Project({
     })) || [];
 
   return (
-    <Column as="section" maxWidth="m" horizontal="center" gap="l">
+    <Column as="section" maxWidth="xl" horizontal="center" gap="l">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -62,31 +82,43 @@ export default async function Project({
         description={post.metadata.summary}
         datePublished={post.metadata.publishedAt}
         dateModified={post.metadata.publishedAt}
-        image={post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`}
+        image={
+          post.metadata.image ||
+          `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`
+        }
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column maxWidth="xs" gap="16">
-        <Button data-border="rounded" href="/work" variant="tertiary" weight="default" size="s" prefixIcon="chevronLeft">
+      <Column maxWidth="s" gap="16">
+        <Button
+          data-border="rounded"
+          href="/work"
+          variant="tertiary"
+          weight="default"
+          size="s"
+          prefixIcon="chevronLeft"
+        >
           Projects
         </Button>
         <Heading variant="display-strong-s">{post.metadata.title}</Heading>
       </Column>
       {post.metadata.images.length > 0 && (
-        <Media
-          priority
-          aspectRatio="16 / 9"
-          radius="m"
-          alt="image"
-          src={post.metadata.images[0]}
+        <Carousel
+          sizes="(max-width: 960px) 100vw, 960px"
+          items={post.metadata.images.map((image) => ({
+            slide: image,
+            alt: post.metadata.title,
+          }))}
         />
       )}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
+      <Column style={{ margin: "auto" }} as="article" maxWidth="s">
         <Flex gap="12" marginBottom="24" vertical="center">
-          {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="m" />}
+          {post.metadata.team && (
+            <AvatarGroup reverse avatars={avatars} size="m" />
+          )}
           <Text variant="body-default-s" onBackground="neutral-weak">
             {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
           </Text>

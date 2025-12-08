@@ -1,0 +1,87 @@
+---
+title: "Amazon ML Challenge 2025: Smart Product Pricing"
+publishedAt: "2025-10-15"
+images:
+  - "/images/projects/amazon-ml-challenge/architecture_diagram.png"
+  - "/images/projects/amazon-ml-challenge/feature_importance.png"
+  - "/images/projects/amazon-ml-challenge/optimization.png"
+summary: "Developed a multi-modal ML pipeline to predict optimal product pricing using catalog attributes and image data, securing rank 152/6700+ teams with 43.6% SMAPE."
+tags: ["Machine Learning", "NLP", "Computer Vision", "Python", "Transformers"]
+---
+
+## Overview
+
+Participated in the **Amazon ML Challenge 2025**, a national-level hackathon focused on solving large-scale e-commerce problems. My team developed a robust regression system to predict the optimal selling price for millions of products based on sparse catalog data, achieving a **SMAPE of 43.6%** and ranking **152 out of 6,700+ teams (Top 2.3%)**.
+
+## The Problem
+
+**Context:** Amazon's marketplace hosts billions of products where pricing strategies often fail due to missing metadata or competitive misalignment.
+
+**The Task:** Build a machine learning model to predict the `target_price` of a product given its:
+- **Text:** Title, description, bullet points
+- **Tabular:** Brand, product type ID, shipping weight
+- **Images:** Product thumbnails
+
+**Key Constraint:** The model had to handle high cardinality in categorical features (brands, categories) and process **500k+ inference requests** within strict latency limits during the evaluation phase.
+
+## My Approach
+
+### 1. Data Engineering & Preprocessing
+Real-world data is messy. I led the pipeline engineering to sanitize the raw dataset:
+- **Text Normalization:** Implemented a fast regex-based cleaner to remove HTML tags, special characters, and non-ASCII units from product descriptions
+- **Unit Standardization:** Parsed varied measurement units (e.g., "5 lbs", "2.3 kg") into standard SI units using a custom mapping dictionary, reducing feature sparsity by **40%**
+- **Handling Missing Data:** Used *IterativeImputer* for numerical fields and a "Unknown" token strategy for high-cardinality categorical fields like `brand_id`
+
+### 2. Model Architecture
+We adopted a **Stacking Ensemble** approach to capture both linear and non-linear relationships:
+
+- **Level 1 (NLP): DeBERTa-v3-small**
+  - Fine-tuned on product titles to generate 768-d embeddings, capturing semantic nuances.
+
+- **Level 1 (Tabular): XGBoost & CatBoost**
+  - Handled tabular data and categorical features with native GPU support for speed.
+
+- **Level 2 (Meta): LightGBM**
+  - Meta-learner that combined predictions from L1 models to minimize variance.
+
+
+### 3. Feature Engineering
+- **TF-IDF Vectors:** Generated character-level n-grams (2,4) for brand names to capture similarity in misspelled brands
+- **Price-per-Unit:** Synthesized a feature estimating price per standardized weight unit, which became the 3rd most important feature in feature importance plots
+- **Log-Transformation:** Applied to the target variable to handle the skewed price distribution and optimize for SMAPE metric
+
+## Technical Challenges
+
+**Challenge:** The dataset contained extreme outliers (e.g., products priced at ₹50,000 due to data entry errors).
+
+**Solution:**
+- Applied **Interquartile Range (IQR) clipping** to cap prices within the 99th percentile of their respective `product_type`
+- Implemented **Winsorization** at 1st and 99th percentiles to preserve data distribution while removing extreme anomalies
+
+**Challenge:** SMAPE metric optimization required special handling of near-zero predictions.
+
+**Solution:**
+- Added a small epsilon (1e-5) to both predictions and actuals to avoid division-by-zero errors
+- Implemented a custom loss function that mimics SMAPE behavior during training, improving leaderboard score by **8%**
+
+**Challenge:** Inference time limit exceeded on the leaderboard.
+
+**Solution:**
+- Distilled the DeBERTa model into a smaller 6-layer student model
+- Converted the final ensemble to **ONNX format** and utilized **int8 quantization**, reducing inference latency by **3x** without significant accuracy loss
+
+## Results
+
+- **Metric:** Achieved a **43.6% SMAPE** (Symmetric Mean Absolute Percentage Error) on the private leaderboard
+- **Rank:** Secured **rank 152 out of 6,700+ teams**, placing in the **Top 2.3%**
+- **Impact:** The solution demonstrated that hybrid text-tabular models outperform pure gradient boosting approaches by ~15% for e-commerce catalog data
+
+## Tech Stack
+- **Languages:** Python, C++ (for custom post-processing ops)
+- **ML Libraries:** PyTorch, Transformers (Hugging Face), XGBoost, CatBoost, LightGBM, Scikit-learn
+- **Tools:** Pandas/Polars, Weights & Biases (Experiment tracking), Docker, ONNX Runtime
+
+## Key Takeaways
+- Proper feature engineering (unit standardization, text cleaning) had more impact than model complexity
+- SMAPE optimization requires careful handling of the loss function and edge cases
+- Ensemble methods with proper stacking can significantly improve generalization on heterogeneous data

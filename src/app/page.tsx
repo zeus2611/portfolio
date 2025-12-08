@@ -121,7 +121,7 @@ export default function Home() {
       <RevealFx translateY="16" delay={0.6}>
         <Projects range={[1, 1]} />
       </RevealFx>
-      <Projects range={[2]} />
+      <Projects range={[2,2]} />
     </Column>
   );
 }
