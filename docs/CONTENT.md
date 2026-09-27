@@ -53,13 +53,15 @@ from typed data derived from it.
     accept/reject as a follow-up (#324), instead of building a custom inline diff UI.
   - I first used `autosave()` so the AI wouldn't directly save changes. Review found that this lost
     changes when users followed the revisions link, so I switched to `savePost()`.
-  - I documented the private-API blocker instead of working around it. A later PR (#861) linked the
-    notice to visual revisions. TODO: the owner should confirm that #861 used the view that was
-    previously blocked.
+  - I documented the private-API blocker instead of hacking around it in #289. In a follow-up
+    (#861, after WordPress 7.0) I linked the success notice to the in-editor visual revisions view.
+    `setCurrentRevisionId` is still private, so it opens the Document Settings sidebar and triggers
+    core's own Revisions button, the same approach WordPress's test utilities use. If the button
+    isn't found, it falls back to the classic `revision.php` screen.
   - Language: I removed an English context wrapper that biased the model and added a
     language-matching rule, following the maintainers' pattern from #357.
 - Outcome: Merged after about 5 weeks and 3 review rounds with the plugin maintainers, in milestone
-  0.8.0.
+  0.8.0. The visual-revisions follow-up (#861) was merged in July 2026.
 
 ### 2. `media-library-ai`: AI in the WordPress Media Library
 - Role / dates: Open-source contributor · Feb–May 2026
@@ -120,16 +122,14 @@ weren't merged.
 
 ## Experience
 
-| Dates | Role | Org |
-|---|---|---|
-| Jul 2026 – now | Intern (co-op), Developer Experience | AMD |
-| Jan 2025 – Jun 2026 | Founding engineer | BridgeTalk |
-| Apr 2025 – Aug 2025 | Cloud Labs Engineer | Whizlabs |
-| May 2024 – Mar 2025 | Cloud Products Associate | Whizlabs |
-| Apr 2023 – May 2024 | Cloud Computing Intern | Whizlabs |
-
-One line each: TODO (the owner). The Whizlabs lines can reuse the LinkedIn bullets: the RAG agent,
-the abuse detection (−78% incidents), and the teardown cost reduction (−35%).
+| Dates | Role | Org | One line |
+|---|---|---|---|
+| Jul 2026 – now | Intern (co-op), Developer Experience | AMD | Building internal developer tooling for IP engineers. |
+| Jan 2025 – Jun 2026 | Founding engineer | BridgeTalk | Built and shipped the consumer and B2B apps of an AI speaking coach on iOS and Android (Flutter, FastAPI, GCP). |
+| Apr 2025 – Aug 2025 | Cloud Labs Engineer | Whizlabs | Built a RAG support agent over AWS and GCP docs that automated 65% of support tickets and cut median time-to-resolve by 42%. |
+| May 2024 – Mar 2025 | Cloud Products Associate | Whizlabs | Built serverless abuse detection that cut malicious resource incidents by 78%, and reworked lab teardown to cut deletion costs by 35%. |
+| Apr 2023 – May 2024 | Cloud Computing Intern | Whizlabs | Built and maintained hands-on GCP and AWS labs; received two Sprint Star awards and a quarterly Outstanding Distinction award. |
+| Jul 2022 – Aug 2022 | Software Engineer Intern | Supista | Integrated payment gateways (+14% online transactions) and built Android performance monitoring (−22% crashes). *(Optional: show only if the timeline doesn't look crowded.)* |
 
 ## Education
 
