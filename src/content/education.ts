@@ -1,4 +1,5 @@
-import { todo, type Todo } from "./todo";
+import { mtechEndYear } from "./timeline";
+import type { Todo } from "./todo";
 
 export type EducationRow = {
   degree: string;
@@ -14,7 +15,7 @@ export const education: readonly EducationRow[] = [
     field: "Signal & Image Processing",
     org: "NIT Rourkela",
     startYear: 2025,
-    endYear: todo("expected graduation year"),
+    endYear: mtechEndYear,
   },
   {
     degree: "B.Tech",
@@ -24,8 +25,3 @@ export const education: readonly EducationRow[] = [
     endYear: 2024,
   },
 ];
-
-export const certification = {
-  name: "Google Cloud Professional Cloud Architect",
-  validThrough: "Sep 2027",
-} as const;

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { identity } from "@/content/identity";
+import { identity } from "@/content/profile";
 import { writingPosts } from "@/content/writing";
 import { Container } from "./Container";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   const hasWriting = writingPosts.length > 0;
@@ -14,10 +15,12 @@ export function Header() {
             {identity.name}
           </Link>
           <nav aria-label="Primary" className="flex items-center gap-6 text-sm">
+            <Link href="/#exp">Experience</Link>
             <Link href="/#work">Work</Link>
-            <Link href="/#open-source">Open source</Link>
+            <Link href="/#oss">Open source</Link>
             {hasWriting ? <Link href="/writing">Writing</Link> : null}
-            <a href={identity.resumeHref}>Résumé</a>
+            <a href={identity.resumeHref}>Résumé ↗</a>
+            <ThemeToggle />
           </nav>
         </div>
       </Container>

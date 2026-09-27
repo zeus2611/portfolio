@@ -8,3 +8,14 @@ export const identity = {
   /** TODO (owner): file not yet supplied — link 404s until it's added to /public. */
   resumeHref: "/resume.pdf",
 } as const;
+
+export const certification = {
+  name: "Google Cloud Professional Cloud Architect",
+} as const;
+
+export const hero = {
+  eyebrow: "HYDERABAD, INDIA",
+  heading: "Nischay",
+  line: "Software engineer working on AI products and developer tools,",
+  accentPhrase: "from the first design doc to production.",
+} as const;

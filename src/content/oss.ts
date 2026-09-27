@@ -2,13 +2,16 @@ export type OssItem = {
   project: string;
   line: string;
   links: readonly { label: string; href: string }[];
-  status?: "in-review";
 };
 
+/**
+ * Never list: Automattic/Jetpack #47018, WordPress/ai-provider-for-openai #15,
+ * appwrite/templates #347 — none were merged.
+ */
 export const ossItems: readonly OssItem[] = [
   {
     project: "WordPress/ai",
-    line: "6 merged PRs to the official WordPress AI plugin: Editorial Updates, Media Library image generation (v0.4.0), bulk alt text, and more.",
+    line: "6 merged PRs: Editorial Updates, Media Library image generation, bulk alt text.",
     links: [
       {
         label: "Merged PRs",
@@ -18,7 +21,7 @@ export const ossItems: readonly OssItem[] = [
   },
   {
     project: "huggingface/transformers",
-    line: "Fixed batch-size handling in Trainer.prediction_loop for DataLoaderShard, which caused a TypeError during distributed evaluation.",
+    line: "Fixed batch-size handling in Trainer.prediction_loop for distributed evaluation.",
     links: [{ label: "PR #34343", href: "https://github.com/huggingface/transformers/pull/34343" }],
   },
   {
@@ -40,11 +43,5 @@ export const ossItems: readonly OssItem[] = [
     links: [
       { label: "PR #2156", href: "https://github.com/open-telemetry/opentelemetry.io/pull/2156" },
     ],
-  },
-  {
-    project: "WordPress/ai",
-    line: "Content Gap Suggestions: a pluggable analytics provider layer with an anonymization boundary.",
-    links: [{ label: "PR #929", href: "https://github.com/WordPress/ai/pull/929" }],
-    status: "in-review",
   },
 ];

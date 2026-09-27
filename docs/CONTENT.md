@@ -1,151 +1,195 @@
 # CONTENT: source of truth
 
-Every fact on the site comes from this file. Anything marked `TODO` is unknown: render it as a
-visible TODO in dev and never invent a value for it. The owner edits this file, and the code reads
-from typed data derived from it.
+Every fact on the site comes from this file. `TODO` means unknown: render a visible TODO in dev,
+omit it in production, and never invent a value. Transcribe this into typed data in
+`src/content/*.ts`.
 
 ## Identity
 
-- Name: **Nischay** (single name, with no surname; don't add one)
+- Name: **Nischay** (a single name with no surname; don't add one)
 - Location: Hyderabad, India
 - Email: itsnischay2604@gmail.com
 - GitHub: https://github.com/zeus2611
 - LinkedIn: https://www.linkedin.com/in/nischay-2604
 - Domain: https://www.nischay.live
 - Résumé: `/resume.pdf` (TODO: the owner will add the file)
+- Certification (footer): Google Cloud Professional Cloud Architect. List only this one; the others
+  have expired.
 
 ## Hero
 
-- H1: **Nischay**
-- Line: **Software engineer working on AI products and developer tools.**
-- Sub-line: Backend, mobile and cloud: from the first design doc to production.
+- Eyebrow: HYDERABAD, INDIA
+- H1: Nischay
+- Line: Software engineer working on AI products and developer tools, *from the first design doc to
+  production.* (the italic phrase is the accent)
+- Links: GitHub · LinkedIn · Email · Résumé
 
-## Now
+## Experience (the graph section)
 
-- Intern (co-op) on AMD's Developer Experience team, working on internal developer tooling for IP
-  engineers.
-- Completing an M.Tech in Signal & Image Processing at NIT Rourkela.
-- Contributing to the WordPress AI plugin in my spare time.
+- Caption: `$ git log --graph --all --author=nischay`
+- Currently line: **CURRENTLY** Intern (co-op), AMD Developer Experience · M.Tech, NIT Rourkela ·
+  contributing to WordPress AI
 
-> Don't name AMD internal projects, tools or products. The owner will update this section if
-> something becomes public.
+> Don't name AMD internal projects, tools or products. The owner will update this if something
+> becomes public.
+
+### Graph data (`src/content/timeline.ts`)
+
+Dates are YYYY-MM. `lane` is one of `main | bridgetalk | open-source | mtech`.
+
+**main** (commits, in order):
+| Date | Label | Tooltip |
+|---|---|---|
+| 2022-07 | supista · swe intern | Integrated payment gateways (+14% online transactions) and built Android performance monitoring (−22% crashes). |
+| 2023-04 | whizlabs · cloud computing intern | Built and maintained hands-on GCP and AWS labs; two Sprint Star awards and a quarterly Outstanding Distinction award. |
+| 2024-05 | whizlabs · cloud products associate | Serverless abuse detection that cut malicious resource incidents by 78%; lab teardown reworked to cut deletion costs by 35%. |
+| 2025-04 | whizlabs · cloud labs engineer | RAG support agent over AWS and GCP docs: 65% of tickets automated, median time-to-resolve down 42%. |
+| 2026-07 | amd · intern (co-op), developer experience **(HEAD)** | Building internal developer tooling for IP engineers. |
+
+Span brackets above main: `whizlabs · apr 2023 – aug 2025` (2023-04 → 2025-08) and
+`amd · intern (co-op) · jul 2026 –` (2026-07 → now).
+
+**bridgetalk** branch: from 2025-01, merged back into main at 2026-06.
+- Label: bridgetalk · founding engineer · 2 apps shipped
+- Tooltip: Built and shipped the consumer and B2B apps of an AI speaking coach on iOS and Android
+  (Flutter, FastAPI, GCP).
+
+**open-source** branch: from 2023-01, still open. Each merged PR is a dot that links to it:
+| Date | Repo | PR | Title |
+|---|---|---|---|
+| 2023-01 | open-telemetry/opentelemetry.io | #2156 | Docs: TypeScript exporter examples |
+| 2024-10 | activist-org/activist | #995 | Runner for the i18n test suite |
+| 2024-10 | huggingface/transformers | #34343 | Fix batch-size handling in `Trainer.prediction_loop` for `DataLoaderShard` |
+| 2024-12 | activist-org/activist | #1020 | Test coverage for group models |
+| 2026-02 | appwrite/templates | #338 | Python storage-cleaner function template |
+| 2026-03 | WordPress/ai | #258 | Standalone AI image generation in the Media Library (v0.4.0) |
+| 2026-04 | WordPress/ai | #330 | Bulk "Generate Alt Text" action |
+| 2026-04 | WordPress/ai | #289 | Refine from Notes, later Editorial Updates |
+| 2026-05 | WordPress/ai | #512 | Image generation loading-state fixes |
+| 2026-05 | WordPress/ai | #528 | Rename to Editorial Notes / Editorial Updates |
+| 2026-07 | WordPress/ai | #861 | Link Editorial Updates to visual revisions |
+
+Branch labels: "open-source"; under the early cluster, "transformers · activist"; under the 2026
+cluster, "WordPress AI · 6 merged".
+
+**mtech** branch: from 2025-08, still open, dashed. Label: m.tech · nit rourkela. Tooltip: M.Tech in
+Signal & Image Processing, NIT Rourkela (2025–TODO: expected year).
+
+Accessible list (visually hidden `<ol>`): one item per main commit, per branch, and per PR, in date
+order, using the tooltip text.
 
 ## Selected work (case studies)
 
-### 1. `editorial-updates`: Editorial Updates for WordPress AI
-- Role / dates: Open-source contributor · Mar–Jul 2026
-- Tags: PHP · TypeScript · React · WordPress · LLMs
-- One-liner: An AI feature that applies an editor's unresolved notes to post content, block by block.
-- Links: https://github.com/WordPress/ai/pull/289 · https://github.com/WordPress/ai/pull/861
-- Context: The official WordPress AI plugin had a "Review Notes" feature that adds AI editorial notes
-  to blocks. Issue #250 asked for the next step: apply those notes automatically. It originally
-  shipped as "Refine from Notes" and was later renamed "Editorial Updates" (#528).
-- Problem: Applying feedback note by note is slow. Authors need AI help that they can still review
-  and undo.
-- Constraints: WordPress revisions are whole-post snapshots, so per-block rollback wasn't possible.
-  The block-based visual revisions view was behind a private Gutenberg API that plugins can't use.
-  Output had to match the content's language.
-- What I built: I mapped pending note threads to their blocks, processed blocks in batches of 4 per
-  request with a live progress indicator, saved the result as a revision, and added a success notice
-  that links to review the revision. I covered it with PHPUnit and end-to-end tests.
-- Decisions & trade-offs:
-  - I proposed shipping "apply all + revision review" as the MVP and tracking per-change
-    accept/reject as a follow-up (#324), instead of building a custom inline diff UI.
-  - I first used `autosave()` so the AI wouldn't directly save changes. Review found that this lost
-    changes when users followed the revisions link, so I switched to `savePost()`.
-  - I documented the private-API blocker instead of hacking around it in #289. In a follow-up
-    (#861, after WordPress 7.0) I linked the success notice to the in-editor visual revisions view.
-    `setCurrentRevisionId` is still private, so it opens the Document Settings sidebar and triggers
-    core's own Revisions button, the same approach WordPress's test utilities use. If the button
-    isn't found, it falls back to the classic `revision.php` screen.
-  - Language: I removed an English context wrapper that biased the model and added a
-    language-matching rule, following the maintainers' pattern from #357.
-- Outcome: Merged after about 5 weeks and 3 review rounds with the plugin maintainers, in milestone
-  0.8.0. The visual-revisions follow-up (#861) was merged in July 2026.
+### 1. `editorial-updates`
+- Card meta: OPEN SOURCE · 2026 · Status: **Merged**
+- Title: Editorial Updates for WordPress AI
+- Tagline: AI that applies an editor's unresolved notes to post content, block by block, and lets the
+  author review and roll back the result.
+- Card tags: PHP · React · LLMs
+- **Overview:** The official WordPress AI plugin could already add AI editorial notes to blocks.
+  Issue #250 asked for the next step: apply those notes automatically, without taking control away
+  from the author. It shipped as "Refine from Notes" and was later renamed Editorial Updates (#528).
+- **Key challenges**
+  1. *Revisions are whole-post snapshots.* Rolling back one block's AI edit would undo all the
+     others. I proposed shipping apply-all with review in revisions as the MVP, and tracking
+     per-change accept/reject as a follow-up (#324).
+  2. *The view we needed was behind a private API.* The block-based visual revisions view was gated
+     to core. I documented the blocker in #289. Then, in #861, I opened the view by triggering
+     core's own Revisions button (the same approach WordPress's test utilities use), with a
+     fallback to the classic `revision.php` screen.
+  3. *Output in the content's language.* An English context wrapper was biasing the model toward
+     English. I removed it and added a language-matching rule, following the maintainers' pattern
+     from #357.
+- **What shipped:** block-by-block refinement in batches of 4 with a live progress indicator ·
+  results saved as a revision for review and rollback · provider errors shown to the user instead of
+  a generic failure · a link to visual revisions with a classic-screen fallback (#861) · PHPUnit and
+  end-to-end tests.
+- **Sidebar:** ROLE Open-source contributor · TIMELINE Mar – Jul 2026 · REVIEW 3 rounds with the
+  plugin maintainers, 42 commits · RELEASE WordPress AI 0.8.0 · STACK PHP, TypeScript, React,
+  Gutenberg, LLMs, PHPUnit · LINKS https://github.com/WordPress/ai/pull/289,
+  https://github.com/WordPress/ai/pull/861, https://github.com/WordPress/ai/issues/250
 
-### 2. `media-library-ai`: AI in the WordPress Media Library
-- Role / dates: Open-source contributor · Feb–May 2026
-- Tags: PHP · TypeScript · React · WordPress · Accessibility
-- One-liner: Standalone AI image generation and bulk alt-text generation for the Media Library.
-- Links: https://github.com/WordPress/ai/pull/258 · https://github.com/WordPress/ai/pull/330 ·
-  https://github.com/WordPress/ai/pull/512
-- What I built:
-  - Standalone image generation (#258, shipped in v0.4.0): an admin page to generate, preview,
-    regenerate and save AI images outside the block editor. I used a capture-phase click listener to
-    work around the media grid's event delegation. It was reviewed by 4 reviewers over multiple
-    rounds.
-  - Bulk "Generate Alt Text" (#330): a Media Library bulk action that processes images one after
-    another, keeps going when a single image fails, shows progress, and cleans up the URL with
-    `history.replaceState` so a refresh can't re-run the job. I added 5 integration tests plus
-    end-to-end coverage.
-  - Follow-up fixes to loading states and button visibility (#512).
+### 2. `media-library-ai`
+- Card meta: OPEN SOURCE · 2026 · Status: **Shipped v0.4.0**
+- Title: AI in the WordPress Media Library
+- Tagline: Standalone AI image generation and bulk alt-text generation for the WordPress Media
+  Library.
+- Card tags: PHP · React · a11y
+- **Overview:** Image generation first existed only inside the block editor, and alt text could only
+  be generated one image at a time. I added both workflows to the Media Library, where site owners
+  actually manage images.
+- **Key challenges**
+  1. *The media grid swallows clicks.* WordPress's media grid delegates events, so a normal click
+     handler on the injected button never fired. I used a capture-phase listener to handle the click
+     before the grid does (#258).
+  2. *Bulk jobs that survive failures.* Generating alt text for dozens of images can't stop at the
+     first failure. Images are processed one at a time with per-item error handling, and a progress
+     notice shows how far along it is (#330).
+  3. *A refresh mustn't re-run the job.* The bulk action passes IDs via query parameters, so I clean
+     up the URL with `history.replaceState` when the job finishes, and a refresh or back navigation
+     can't trigger it again.
+- **What shipped:** a standalone image generation page (generate, preview, regenerate, save) in
+  v0.4.0 · a bulk "Generate Alt Text" action · loading-state and button-visibility fixes (#512) · 5
+  integration tests plus end-to-end coverage.
+- **Sidebar:** ROLE Open-source contributor · TIMELINE Feb – May 2026 · REVIEW 4 reviewers on #258 ·
+  STACK PHP, TypeScript, React, WordPress · LINKS https://github.com/WordPress/ai/pull/258,
+  https://github.com/WordPress/ai/pull/330, https://github.com/WordPress/ai/pull/512
 
-### 3. `bridgetalk`: BridgeTalk
-- Role / dates: Founding engineer · Jan 2025–Jun 2026
-- Tags: Flutter · FastAPI · Appwrite · GCP · LLMs
-- One-liner: An AI speaking coach for IELTS and TOEFL candidates, with consumer and B2B apps on iOS
-  and Android.
-- Links: https://apps.apple.com/us/app/bridgetalk/id6743174081 ·
-  https://apps.apple.com/us/app/bridgetalk-ai-enterprise/id6749461827 ·
+### 3. `bridgetalk`
+- Card meta: EDTECH · 2025–26 · Status: **Live**
+- Title: BridgeTalk
+- Tagline: An AI speaking coach for IELTS and TOEFL candidates, built from zero, with consumer and B2B
+  apps on iOS and Android.
+- Card tags: Flutter · FastAPI · GCP
+- **Overview:** BridgeTalk helps students prepare for the IELTS and TOEFL speaking sections, with AI
+  feedback on fluency, pronunciation, pace and vocabulary. As founding engineer I built the product
+  from zero: a consumer app, a B2B Enterprise app for institutions, and the backend behind both.
+- **Key challenges**
+  1. *iOS and Android at the same time.* Both platforms were needed at launch, with a native-feel UX
+     and a tight timeline. I used one Flutter codebase for both stores, including StoreKit 2 in-app
+     purchases on iOS.
+  2. *Two audiences, one platform.* Individual learners and institutions have very different
+     journeys. I built a multi-tenant backend on Appwrite with role-based access control and
+     real-time subscriptions, serving 500+ users, and shipped a separate Enterprise app for B2B.
+  3. *Heavy audio without a frozen UI.* Speech has to be transcoded and processed before AI feedback
+     comes back. Serverless functions handle transcoding and translation asynchronously, so the app
+     stays responsive.
+- **What shipped:** the consumer app on the App Store and Play Store · BridgeTalk AI Enterprise
+  (B2B) · a multi-tenant backend with role-based access control · AI speaking feedback · in-app
+  purchases.
+- **Sidebar:** ROLE Founding engineer · TIMELINE Jan 2025 – Jun 2026 · PLATFORMS iOS, Android ·
+  STACK Flutter, Dart, FastAPI, Appwrite, Firebase, GCP, OpenAI (TODO: confirm whether Deepgram
+  should be listed) · LINKS https://apps.apple.com/us/app/bridgetalk/id6743174081,
+  https://apps.apple.com/us/app/bridgetalk-ai-enterprise/id6749461827,
   https://play.google.com/store/apps/details?id=com.bridgetalk.beta
-- What I built: A multi-tenant SaaS backend on Appwrite with role-based access control and real-time
-  subscriptions (500+ users), serverless functions for asynchronous audio transcoding and
-  translation, AI speaking feedback (fluency, pronunciation, pace, vocabulary), and App Store / Play
-  Store releases including StoreKit 2 in-app purchases.
-- Decisions & trade-offs: TODO (the owner to write 2–3 bullets)
-- Note: the code is closed source, so don't link a repo.
+- Closed source, so no repo link. Leave out marketing, video and SEO work; that was the wider team's.
 
-### 4. `rag-support-agent`: AI support agent at Whizlabs
-- Role / dates: Cloud Labs Engineer, Whizlabs · 2025
-- Tags: Python · RAG · Vector DB · AWS · GCP
-- One-liner: A RAG support agent over AWS and GCP documentation.
-- Outcome: Automated 65% of support tickets and cut median time-to-resolve by 42%.
-- Everything else: TODO (the owner to write it). Internal work, with no public links.
-- Show this as a card only once the case study has real content. Until then, leave it out.
+### Not included
+- `rag-support-agent` (Whizlabs): leave it out until the owner writes a case study. The facts are
+  already in the graph tooltip.
+- Journll Insights: not the owner's engineering work, so exclude it.
+- Content Gap Suggestions (WordPress/ai #929): add it as a card with status **In review** only if
+  the owner asks, and update it once it merges.
 
-## Open source (ordered)
+## Open source (list section, in this order)
 
 | Project | Line | Links |
 |---|---|---|
-| WordPress/ai | 6 merged PRs to the official WordPress AI plugin: Editorial Updates, Media Library image generation (v0.4.0), bulk alt text, and more. | https://github.com/WordPress/ai/pulls?q=is%3Apr+author%3Azeus2611+is%3Amerged |
-| huggingface/transformers | Fixed batch-size handling in `Trainer.prediction_loop` for `DataLoaderShard`, which caused a `TypeError` during distributed evaluation. | https://github.com/huggingface/transformers/pull/34343 |
+| WordPress/ai | 6 merged PRs: Editorial Updates, Media Library image generation, bulk alt text. | https://github.com/WordPress/ai/pulls?q=is%3Apr+author%3Azeus2611+is%3Amerged |
+| huggingface/transformers | Fixed batch-size handling in `Trainer.prediction_loop` for distributed evaluation. | https://github.com/huggingface/transformers/pull/34343 |
 | appwrite/templates | Python storage-cleaner function template. | https://github.com/appwrite/templates/pull/338 |
 | activist-org/activist | Test coverage for group models and an i18n test runner. | https://github.com/activist-org/activist/pull/1020 · https://github.com/activist-org/activist/pull/995 |
 | open-telemetry/opentelemetry.io | Docs: TypeScript exporter examples. | https://github.com/open-telemetry/opentelemetry.io/pull/2156 |
 
-**In review (optional row):** WordPress/ai #929, Content Gap Suggestions: a pluggable analytics
-provider layer with an anonymization boundary. Label it "in review" and remove it or update it once
-it merges.
+**Never list** Automattic/Jetpack #47018, WordPress/ai-provider-for-openai #15, or
+appwrite/templates #347. They weren't merged.
 
-Don't list Automattic/Jetpack, WordPress/ai-provider-for-openai, or appwrite/templates #347. Those PRs
-weren't merged.
+## Education (graph tooltip plus JSON-LD)
 
-## Experience
-
-| Dates | Role | Org | One line |
-|---|---|---|---|
-| Jul 2026 – now | Intern (co-op), Developer Experience | AMD | Building internal developer tooling for IP engineers. |
-| Jan 2025 – Jun 2026 | Founding engineer | BridgeTalk | Built and shipped the consumer and B2B apps of an AI speaking coach on iOS and Android (Flutter, FastAPI, GCP). |
-| Apr 2025 – Aug 2025 | Cloud Labs Engineer | Whizlabs | Built a RAG support agent over AWS and GCP docs that automated 65% of support tickets and cut median time-to-resolve by 42%. |
-| May 2024 – Mar 2025 | Cloud Products Associate | Whizlabs | Built serverless abuse detection that cut malicious resource incidents by 78%, and reworked lab teardown to cut deletion costs by 35%. |
-| Apr 2023 – May 2024 | Cloud Computing Intern | Whizlabs | Built and maintained hands-on GCP and AWS labs; received two Sprint Star awards and a quarterly Outstanding Distinction award. |
-| Jul 2022 – Aug 2022 | Software Engineer Intern | Supista | Integrated payment gateways (+14% online transactions) and built Android performance monitoring (−22% crashes). *(Optional: show only if the timeline doesn't look crowded.)* |
-
-## Education
-
-- M.Tech, Signal & Image Processing, NIT Rourkela · 2025–TODO (expected year)
+- M.Tech, Signal & Image Processing, NIT Rourkela · 2025–TODO
 - B.Tech, Electronics & Communication Engineering, Shri Mata Vaishno Devi University · 2020–2024
 
-## Certification (single line, in the footer or Experience)
+## Writing (hidden until the first post is published)
 
-- Google Cloud Professional Cloud Architect (valid through Sep 2027). List **only** this one. The
-  others have expired.
-
-## Writing (planned; hidden until published)
-
-- TODO: "Shipping an AI feature into WordPress: designing around a whole-post revision model" (#289 story)
-- TODO: "What a RAG support agent taught me about production retrieval" (Whizlabs)
-
-## Stack line (plain text, Home footer or Now)
-
-Python · TypeScript/React · PHP · Dart/Flutter · FastAPI · GCP · Docker · Kubernetes · LLM/RAG tooling
+- TODO: "Shipping an AI feature into WordPress: designing around a whole-post revision model"
+- TODO: "What a RAG support agent taught me about production retrieval"
