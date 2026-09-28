@@ -11,10 +11,10 @@ export function Header() {
     <header className="border-b border-border">
       <Container size="wide">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="font-display text-lg font-semibold no-underline">
+          <Link href="/" className="font-display text-h3 font-semibold no-underline">
             {identity.name}
           </Link>
-          <nav aria-label="Primary" className="flex items-center gap-6 text-sm">
+          <nav aria-label="Primary" className="flex items-center gap-6 text-ui">
             <Link href="/#exp">Experience</Link>
             <Link href="/#work">Work</Link>
             <Link href="/#oss">Open source</Link>

@@ -7,10 +7,10 @@ export function SelectedWork() {
     <section id="work" className="border-t border-border py-16 md:py-22">
       <Container size="wide">
         <div className="flex items-baseline justify-between">
-          <p className="font-mono text-[13px] uppercase tracking-[0.16em] text-accent">
+          <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
             Selected work
           </p>
-          <p className="font-mono text-[13px] text-subtle">{workItems.length} case studies</p>
+          <p className="font-mono text-eyebrow text-subtle">{workItems.length} case studies</p>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {workItems.map((item) => (
@@ -27,10 +27,10 @@ export function SelectedWork() {
                   {item.status}
                 </span>
               </div>
-              <h3 className="font-display text-[23px] font-semibold leading-tight text-ink">
+              <h3 className="font-display text-card-title font-semibold leading-tight text-ink">
                 {item.title}
               </h3>
-              <p className="text-[15px] leading-relaxed text-muted">{item.tagline}</p>
+              <p className="text-support leading-relaxed text-muted">{item.tagline}</p>
               <div className="flex flex-wrap gap-2">
                 {item.cardTags.map((tag) => (
                   <span
@@ -41,7 +41,7 @@ export function SelectedWork() {
                   </span>
                 ))}
               </div>
-              <p className="mt-auto text-sm text-accent">
+              <p className="mt-auto text-support text-accent">
                 Read case study{" "}
                 <span className="inline-block transition-transform group-hover:translate-x-0.5">
                   →

@@ -38,6 +38,25 @@
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-geist);
   --font-mono: var(--font-jetbrains-mono);
+
+  /*
+   * Fluid type scale: grows smoothly with viewport width instead of
+   * jumping once at a breakpoint and then sitting flat forever, so a
+   * 15"+ laptop or a large external monitor gets noticeably larger text
+   * than what DESIGN.md's fixed mobile/desktop pair alone would give.
+   * clamp(min, preferred, max) — the vw term drives growth between
+   * roughly 480px and 1600px viewport width.
+   */
+  --text-eyebrow: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem); /* ~12 -> 13px */
+  --text-ui: clamp(0.9375rem, 0.87rem + 0.28vw, 1.0625rem); /* ~15 -> 17px, nav/footer */
+  --text-support: clamp(0.9375rem, 0.86rem + 0.32vw, 1.0625rem); /* ~15 -> 17px, muted copy */
+  --text-body: clamp(1.0625rem, 0.97rem + 0.4vw, 1.1875rem); /* ~17 -> 19px */
+  --text-hero-line: clamp(1.25rem, 1.05rem + 0.8vw, 1.8125rem); /* ~20 -> 29px */
+  --text-h3: clamp(1.25rem, 1.13rem + 0.5vw, 1.5rem); /* ~20 -> 24px */
+  --text-card-title: clamp(1.375rem, 1.22rem + 0.6vw, 1.625rem); /* ~22 -> 26px */
+  --text-h2: clamp(1.75rem, 1.5rem + 1vw, 2.25rem); /* ~28 -> 36px */
+  --text-case-h1: clamp(2.375rem, 1.75rem + 2.5vw, 4.25rem); /* ~38 -> 68px */
+  --text-hero: clamp(2.75rem, 1.7rem + 4.2vw, 5rem); /* ~44 -> 80px */
 }
 
 body {

@@ -8,16 +8,16 @@ export function Hero() {
       <div className="paper-grid absolute inset-0" aria-hidden="true" />
       <WaveCanvas />
       <Container size="wide" className="relative z-10 pt-16 md:pt-24">
-        <p className="font-mono text-[13px] uppercase tracking-[0.16em] text-accent">
+        <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
           {hero.eyebrow}
         </p>
-        <h1 className="mt-4 font-display text-[44px] font-semibold leading-none tracking-[-0.02em] md:text-[72px]">
+        <h1 className="mt-4 font-display text-hero font-semibold leading-none tracking-[-0.02em]">
           {hero.heading}
         </h1>
-        <p className="mt-6 max-w-[560px] text-[20px] leading-snug text-ink md:text-[26px]">
+        <p className="mt-6 max-w-150 text-hero-line leading-snug text-ink">
           {hero.line} <em className="font-display italic text-accent">{hero.accentPhrase}</em>
         </p>
-        <nav aria-label="Profile links" className="mt-8 flex flex-wrap gap-6 text-sm">
+        <nav aria-label="Profile links" className="mt-8 flex flex-wrap gap-6 text-ui">
           <a href={identity.github}>GitHub ↗</a>
           <a href={identity.linkedin}>LinkedIn ↗</a>
           <a href={`mailto:${identity.email}`}>Email</a>
