@@ -102,6 +102,25 @@ a:hover {
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
 }
 
+.graph-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  fill: var(--ink);
+}
+
+.graph-role {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  fill: var(--muted);
+}
+
+.graph-year {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: var(--subtle);
+}
+
 .wave-canvas {
   mask-image: linear-gradient(to bottom, transparent 45%, #000 75%, #000 92%, transparent 100%);
   -webkit-mask-image: linear-gradient(
