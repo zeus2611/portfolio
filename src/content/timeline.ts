@@ -164,8 +164,12 @@ export const openSourceBranch = {
 /** TODO (owner): expected graduation year. */
 export const mtechEndYear: number | Todo = todo("expected graduation year");
 
+const mtechYears = isTodo(mtechEndYear)
+  ? `2025–present${process.env.NODE_ENV !== "production" ? " [TODO: confirm end year]" : ""}`
+  : `2025–${mtechEndYear}`;
+
 export const mtechBranch = {
   from: "2025-08",
   label: "m.tech · nit rourkela",
-  tooltip: `M.Tech in Signal & Image Processing, NIT Rourkela (2025–${isTodo(mtechEndYear) ? "TODO" : mtechEndYear}).`,
+  tooltip: `M.Tech in Signal & Image Processing, NIT Rourkela (${mtechYears}).`,
 } as const;
