@@ -92,3 +92,23 @@ a:hover {
   left: 16px;
   top: 16px;
 }
+
+.paper-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 55%);
+}
+
+.wave-canvas {
+  mask-image: linear-gradient(to bottom, transparent 45%, #000 75%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 45%,
+    #000 75%,
+    #000 92%,
+    transparent 100%
+  );
+}

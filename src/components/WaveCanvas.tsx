@@ -1,0 +1,220 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+const X_MIN = -11;
+const X_MAX = 11;
+const D_MIN = -7;
+const D_MAX = 4.5;
+const CAM_HEIGHT = 3;
+const CAM_DIST = 9;
+const FOV_DEG = 55;
+const MAX_DPR = 1.5;
+const MAX_FPS = 30;
+const FRAME_INTERVAL = 1000 / MAX_FPS;
+const STATIC_FRAME_T = 2.2;
+const MOBILE_BREAKPOINT = 768;
+
+function heightField(x: number, d: number, t: number): number {
+  return (
+    0.45 * Math.sin(0.4 * x + 0.9 * t) +
+    0.3 * Math.sin(0.5 * d + 0.65 * t) +
+    0.2 * Math.sin(0.28 * (x + d) + 0.5 * t)
+  );
+}
+
+function linspace(min: number, max: number, steps: number): number[] {
+  const points: number[] = [];
+  for (let i = 0; i <= steps; i++) {
+    points.push(min + ((max - min) * i) / steps);
+  }
+  return points;
+}
+
+const CAMERA_PITCH = Math.atan2(CAM_HEIGHT, CAM_DIST);
+const HALF_FOV = (FOV_DEG / 2) * (Math.PI / 180);
+
+function project(x: number, d: number, z: number, width: number, height: number): [number, number] {
+  const up = -1.8 + z - CAM_HEIGHT;
+  const fw = CAM_DIST - d;
+  const up2 = up * Math.cos(CAMERA_PITCH) + fw * Math.sin(CAMERA_PITCH);
+  const fw2 = fw * Math.cos(CAMERA_PITCH) - up * Math.sin(CAMERA_PITCH);
+  const focal = height / 2 / Math.tan(HALF_FOV);
+  const sx = width / 2 + (focal * x) / fw2;
+  const sy = height / 2 - (focal * up2) / fw2 + 60;
+  return [sx, sy];
+}
+
+/**
+ * A wireframe terrain grid rendered as a Canvas 2D animation — see
+ * DESIGN.md → "Signature 1: the wave hero" for the exact maths. No
+ * dependencies, no three.js: this is a deliberately small module.
+ */
+export function WaveCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let width = 0;
+    let height = 0;
+    let xs: number[] = [];
+    let ds: number[] = [];
+
+    function resize() {
+      const rect = canvas!.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      canvas!.width = Math.round(width * dpr);
+      canvas!.height = Math.round(height * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const mobile = window.innerWidth < MOBILE_BREAKPOINT;
+      xs = linspace(X_MIN, X_MAX, mobile ? 22 : 44);
+      ds = linspace(D_MIN, D_MAX, mobile ? 11 : 22);
+    }
+
+    // One Path2D per frame, one stroke() call — 68 separate stroke() calls
+    // per frame was the dominant cost under simulated mobile CPU throttling.
+    function draw(t: number) {
+      ctx!.clearRect(0, 0, width, height);
+
+      const rootStyle = getComputedStyle(document.documentElement);
+      const accent = rootStyle.getPropertyValue("--accent").trim() || "#1f6f6a";
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+
+      const path = new Path2D();
+
+      // Depth lines: fixed depth, traced along x (23 on desktop).
+      for (const d of ds) {
+        xs.forEach((x, i) => {
+          const [sx, sy] = project(x, d, heightField(x, d, t), width, height);
+          if (i === 0) path.moveTo(sx, sy);
+          else path.lineTo(sx, sy);
+        });
+      }
+
+      // Cross lines: fixed x, traced along depth (45 on desktop).
+      for (const x of xs) {
+        ds.forEach((d, i) => {
+          const [sx, sy] = project(x, d, heightField(x, d, t), width, height);
+          if (i === 0) path.moveTo(sx, sy);
+          else path.lineTo(sx, sy);
+        });
+      }
+
+      ctx!.strokeStyle = accent;
+      ctx!.lineWidth = 1;
+      ctx!.globalAlpha = isDark ? 0.5 : 0.42;
+      ctx!.stroke(path);
+    }
+
+    resize();
+    draw(STATIC_FRAME_T);
+
+    if (reducedMotion) {
+      const onResize = () => draw(STATIC_FRAME_T);
+      const themeObserver = new MutationObserver(() => draw(STATIC_FRAME_T));
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+      window.addEventListener("resize", onResize);
+      return () => {
+        window.removeEventListener("resize", onResize);
+        themeObserver.disconnect();
+      };
+    }
+
+    let elapsed = STATIC_FRAME_T;
+    let lastFrameTime = 0;
+    let rafId = 0;
+    let running = false;
+
+    function loop(now: number) {
+      rafId = requestAnimationFrame(loop);
+      if (now - lastFrameTime < FRAME_INTERVAL) return;
+      const dt = lastFrameTime ? (now - lastFrameTime) / 1000 : 0;
+      lastFrameTime = now;
+      elapsed += Math.min(dt, 1 / 30);
+      draw(elapsed);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      lastFrameTime = 0;
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function stop() {
+      running = false;
+      cancelAnimationFrame(rafId);
+    }
+
+    let idleHandle: number | ReturnType<typeof setTimeout> | undefined;
+    let idleIsCallback = false;
+    let idleRequested = false;
+
+    function beginWhenIdle() {
+      if (idleRequested) return;
+      idleRequested = true;
+      if (typeof window.requestIdleCallback === "function") {
+        idleIsCallback = true;
+        idleHandle = window.requestIdleCallback(() => start());
+      } else {
+        idleHandle = setTimeout(start, 200);
+      }
+    }
+
+    const onResize = () => {
+      resize();
+      draw(elapsed);
+    };
+    window.addEventListener("resize", onResize);
+
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) beginWhenIdle();
+          else stop();
+        }
+      },
+      { threshold: 0.01 },
+    );
+    intersectionObserver.observe(canvas);
+
+    function onVisibilityChange() {
+      if (document.hidden) stop();
+      else beginWhenIdle();
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      intersectionObserver.disconnect();
+      stop();
+      if (idleHandle !== undefined) {
+        if (idleIsCallback && typeof window.cancelIdleCallback === "function") {
+          window.cancelIdleCallback(idleHandle as number);
+        } else {
+          clearTimeout(idleHandle as ReturnType<typeof setTimeout>);
+        }
+      }
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="wave-canvas absolute inset-0 h-full w-full"
+    />
+  );
+}
