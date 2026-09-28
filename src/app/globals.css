@@ -123,20 +123,20 @@ a:hover {
 
 .graph-eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 0.06em;
   fill: var(--ink);
 }
 
 .graph-role {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 14px;
   fill: var(--muted);
 }
 
 .graph-year {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 14px;
   fill: var(--subtle);
 }
 

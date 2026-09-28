@@ -342,7 +342,7 @@ export function GitGraph() {
                 <Node
                   cx={x}
                   cy={MAIN_Y}
-                  r={8}
+                  r={9}
                   fill="var(--accent)"
                   label={`HEAD — ${commit.label}, ${commit.date}: ${commit.tooltip}`}
                   heading={`HEAD · ${commit.date}`}
@@ -363,7 +363,7 @@ export function GitGraph() {
               <Node
                 cx={x}
                 cy={MAIN_Y}
-                r={6}
+                r={7}
                 fill="var(--bg)"
                 stroke="var(--ink)"
                 strokeWidth={2}
@@ -397,7 +397,7 @@ export function GitGraph() {
             key={pr.href}
             cx={xScale(pr.date)}
             cy={LANE_Y["open-source"]}
-            r={4}
+            r={5}
             fill="var(--accent)"
             label={`${pr.repo} ${pr.pr} — ${pr.title}, ${pr.date}`}
             heading={`${pr.repo} ${pr.pr} · ${pr.date}`}
@@ -412,7 +412,7 @@ export function GitGraph() {
         <Node
           cx={xScale(bridgetalkBranch.from)}
           cy={LANE_Y.bridgetalk}
-          r={5}
+          r={6}
           fill="var(--surface)"
           stroke="var(--ink)"
           strokeWidth={2}
@@ -425,7 +425,7 @@ export function GitGraph() {
         <Node
           cx={xScale(mtechBranch.from)}
           cy={LANE_Y.mtech}
-          r={5}
+          r={6}
           fill="var(--surface)"
           stroke="var(--subtle)"
           strokeWidth={2}
@@ -443,10 +443,10 @@ export function GitGraph() {
       {tooltip ? (
         <div
           role="tooltip"
-          className="pointer-events-none absolute z-20 w-56 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-lg border border-border bg-surface p-3 text-sm shadow-sm"
+          className="pointer-events-none absolute z-20 w-56 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-lg border border-border bg-surface p-3 text-base shadow-sm"
           style={{ left: tooltip.x, top: tooltip.y }}
         >
-          <p className="font-mono text-[11px] uppercase tracking-wide text-subtle">
+          <p className="font-mono text-xs uppercase tracking-wide text-subtle">
             {tooltip.heading}
           </p>
           <p className="mt-1 text-ink">{tooltip.body}</p>
@@ -521,8 +521,8 @@ function MobileGraph({
                   onActivate(e, `${row.commit.label} · ${row.commit.date}`, row.commit.tooltip)
                 }
               >
-                <p className="font-mono text-xs text-subtle">{row.commit.date}</p>
-                <p className="text-sm text-ink">
+                <p className="font-mono text-sm text-subtle">{row.commit.date}</p>
+                <p className="text-base text-ink">
                   {row.commit.head ? "HEAD · " : ""}
                   {row.commit.label}
                 </p>
@@ -535,8 +535,8 @@ function MobileGraph({
                 onBlur={onDeactivate}
                 onClick={(e) => onActivate(e, row.label, row.tooltip)}
               >
-                <p className="font-mono text-xs text-accent">{row.label}</p>
-                <p className="text-sm text-muted">{row.sub}</p>
+                <p className="font-mono text-sm text-accent">{row.label}</p>
+                <p className="text-base text-muted">{row.sub}</p>
               </button>
             )}
           </div>
