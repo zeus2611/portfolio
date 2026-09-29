@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { identity } from "@/content/profile";
-import { writingPosts } from "@/content/writing";
+import { getPublishedPosts } from "@/lib/writing";
 import { Container } from "./Container";
 import { ThemeToggle } from "./ThemeToggle";
 
-export function Header() {
-  const hasWriting = writingPosts.length > 0;
+export async function Header() {
+  const hasWriting = (await getPublishedPosts()).length > 0;
 
   return (
     <header className="border-b border-border">

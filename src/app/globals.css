@@ -10,6 +10,20 @@
   --grid: #e6e1d6;
   --accent: #1f6f6a;
   --accent-ink: #ffffff;
+
+  /* Shiki (createCssVariablesTheme) reads these; they follow the tokens, so
+     code blocks re-theme with the site instead of needing a second pass. */
+  --shiki-foreground: var(--ink);
+  --shiki-background: var(--surface);
+  --shiki-token-comment: var(--subtle);
+  --shiki-token-punctuation: var(--subtle);
+  --shiki-token-keyword: var(--accent);
+  --shiki-token-constant: var(--accent);
+  --shiki-token-link: var(--accent);
+  --shiki-token-string: var(--muted);
+  --shiki-token-string-expression: var(--muted);
+  --shiki-token-parameter: var(--ink);
+  --shiki-token-function: var(--ink);
 }
 
 [data-theme="dark"] {
@@ -149,4 +163,13 @@ a:hover {
     #000 92%,
     transparent 100%
   );
+}
+
+.post-body :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
 }
