@@ -14,7 +14,7 @@ export default async function WritingIndexPage() {
   const posts = await getPosts();
 
   return (
-    <Container size="reading" className="py-16 md:py-20">
+    <Container className="py-16 md:py-20">
       <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">Writing</p>
       <h1 className="mt-4 font-display text-case-h1 font-semibold leading-tight tracking-[-0.02em]">
         Writing
@@ -23,7 +23,7 @@ export default async function WritingIndexPage() {
       {posts.length === 0 ? (
         <p className="mt-10 text-body text-muted">Nothing published yet.</p>
       ) : (
-        <ul className="mt-10 flex flex-col divide-y divide-border border-y border-border">
+        <ul className="mt-10 flex max-w-3xl flex-col divide-y divide-border border-y border-border">
           {posts.map((post) => (
             <li key={post.slug} className="py-6">
               <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wide text-subtle">

@@ -4,7 +4,7 @@ import { Container } from "./Container";
 export function OpenSource() {
   return (
     <section id="oss" className="border-t border-border py-16 md:py-22">
-      <Container size="wide">
+      <Container>
         <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
           Open source
         </p>
@@ -12,7 +12,7 @@ export function OpenSource() {
           {ossItems.map((item) => (
             <div
               key={item.project}
-              className="grid grid-cols-1 gap-2 py-5 md:grid-cols-[260px_1fr_150px] md:items-center md:gap-6"
+              className="grid grid-cols-1 gap-2 py-5 md:grid-cols-[320px_1fr_150px] md:items-center md:gap-6"
             >
               <p className="text-body font-medium text-ink">{item.project}</p>
               <p className="text-support text-muted">{item.line}</p>

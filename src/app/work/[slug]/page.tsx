@@ -77,29 +77,31 @@ export default async function CaseStudyPage({
     <>
       <div className="relative overflow-hidden border-b border-border">
         <div className="paper-grid absolute inset-0" aria-hidden="true" />
-        <Container size="reading" className="relative py-16 md:py-20">
-          <Link href="/#work" className="text-ui">
-            ← All work
-          </Link>
-          <div className="mt-6 flex items-center gap-3">
-            <p className="font-mono text-[11px] uppercase tracking-wide text-subtle">
-              {item.category} · {item.year}
-            </p>
-            <span className="whitespace-nowrap rounded-full border border-accent px-2 py-px font-mono text-[11px] text-accent">
-              {item.status}
-            </span>
+        <Container className="relative py-16 md:py-20">
+          <div className="max-w-3xl">
+            <Link href="/#work" className="text-ui">
+              ← All work
+            </Link>
+            <div className="mt-6 flex items-center gap-3">
+              <p className="font-mono text-[11px] uppercase tracking-wide text-subtle">
+                {item.category} · {item.year}
+              </p>
+              <span className="whitespace-nowrap rounded-full border border-accent px-2 py-px font-mono text-[11px] text-accent">
+                {item.status}
+              </span>
+            </div>
+            <h1 className="mt-4 font-display text-case-h1 font-semibold leading-tight tracking-[-0.02em]">
+              {item.title}
+            </h1>
+            <p className="mt-4 text-body text-muted">{item.tagline}</p>
+            {item.note ? <p className="mt-2 text-support text-subtle">{item.note}</p> : null}
           </div>
-          <h1 className="mt-4 font-display text-case-h1 font-semibold leading-tight tracking-[-0.02em]">
-            {item.title}
-          </h1>
-          <p className="mt-4 text-body text-muted">{item.tagline}</p>
-          {item.note ? <p className="mt-2 text-support text-subtle">{item.note}</p> : null}
         </Container>
       </div>
 
-      <Container size="wide" className="py-16 md:py-20">
-        <div className="flex flex-col gap-12 md:grid md:grid-cols-[minmax(0,1fr)_280px] md:items-start md:gap-18">
-          <div className="order-2 max-w-[680px] md:order-none">
+      <Container className="py-16 md:py-20">
+        <div className="flex flex-col gap-12 md:grid md:grid-cols-[minmax(0,1fr)_300px] md:items-start md:gap-18">
+          <div className="order-2 md:order-none">
             <section>
               <h2 className="font-display text-h2 font-semibold">Overview</h2>
               <div className="mt-4 flex flex-col gap-4 text-body leading-relaxed text-ink">

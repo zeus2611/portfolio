@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border py-10">
-      <Container size="wide">
+      <Container>
         <div className="flex flex-col gap-4 text-ui text-muted md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-4">
             <a href={`mailto:${identity.email}`}>{identity.email}</a>
