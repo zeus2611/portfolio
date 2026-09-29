@@ -16,6 +16,11 @@ const INNER_RIGHT = 1160;
 const MAIN_Y = 100;
 const LANE_Y = { bridgetalk: 200, "open-source": 290, mtech: 370 } as const;
 const DOMAIN_START = 2022.3;
+/** x-distance a branch curve takes to go from MAIN_Y to its laneY — matches
+ * the "x0+24 laneY" control point in closedBranchPath/openBranchPath below.
+ * Anything drawn ON a lane (a dot, say) needs cx >= x0 + this, or it'll sit
+ * off the curve, which is still transitioning at x0. */
+const BRANCH_CURVE_RUN = 24;
 
 function toDecimalYear(date: string): number {
   const [y, m] = date.split("-").map(Number);
@@ -37,11 +42,13 @@ function xScale(date: string): number {
 }
 
 function closedBranchPath(x0: number, x1: number, laneY: number): string {
-  return `M ${x0} ${MAIN_Y} C ${x0 + 16} ${MAIN_Y} ${x0 + 8} ${laneY} ${x0 + 24} ${laneY} H ${x1 - 24} C ${x1 - 8} ${laneY} ${x1 - 16} ${MAIN_Y} ${x1} ${MAIN_Y}`;
+  const r = BRANCH_CURVE_RUN;
+  return `M ${x0} ${MAIN_Y} C ${x0 + 16} ${MAIN_Y} ${x0 + 8} ${laneY} ${x0 + r} ${laneY} H ${x1 - r} C ${x1 - 8} ${laneY} ${x1 - 16} ${MAIN_Y} ${x1} ${MAIN_Y}`;
 }
 
 function openBranchPath(x0: number, endX: number, laneY: number): string {
-  return `M ${x0} ${MAIN_Y} C ${x0 + 16} ${MAIN_Y} ${x0 + 8} ${laneY} ${x0 + 24} ${laneY} H ${endX}`;
+  const r = BRANCH_CURVE_RUN;
+  return `M ${x0} ${MAIN_Y} C ${x0 + 16} ${MAIN_Y} ${x0 + 8} ${laneY} ${x0 + r} ${laneY} H ${endX}`;
 }
 
 const YEARS = (() => {
@@ -391,11 +398,14 @@ export function GitGraph() {
           );
         })}
 
-        {/* Open-source PR dots */}
+        {/* Open-source PR dots — clamped past the branch curve's run since
+            the first PR (2023-01) lands the same month as the branch itself,
+            which without this would sit at x0, still on the curve's rise
+            toward MAIN_Y rather than on the flat laneY line. */}
         {openSourceBranch.prs.map((pr) => (
           <Node
             key={pr.href}
-            cx={xScale(pr.date)}
+            cx={Math.max(xScale(pr.date), xScale(openSourceBranch.from) + BRANCH_CURVE_RUN)}
             cy={LANE_Y["open-source"]}
             r={5}
             fill="var(--accent)"
@@ -408,9 +418,11 @@ export function GitGraph() {
           />
         ))}
 
-        {/* bridgetalk + mtech branch nodes (single representative dot each) */}
+        {/* bridgetalk + mtech branch nodes (single representative dot each) —
+            cx is shifted past the curve's run so the dot sits where the line
+            actually is (flat at laneY), not at x0 where it's still at MAIN_Y. */}
         <Node
-          cx={xScale(bridgetalkBranch.from)}
+          cx={xScale(bridgetalkBranch.from) + BRANCH_CURVE_RUN}
           cy={LANE_Y.bridgetalk}
           r={6}
           fill="var(--surface)"
@@ -423,7 +435,7 @@ export function GitGraph() {
           onDeactivate={deactivate}
         />
         <Node
-          cx={xScale(mtechBranch.from)}
+          cx={xScale(mtechBranch.from) + BRANCH_CURVE_RUN}
           cy={LANE_Y.mtech}
           r={6}
           fill="var(--surface)"
