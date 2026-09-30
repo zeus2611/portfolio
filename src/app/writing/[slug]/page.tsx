@@ -58,28 +58,42 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               {post.title}
             </h1>
             <p className="mt-4 text-body text-muted">{post.summary}</p>
-            {post.tags.length > 0 ? (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            ) : null}
           </div>
         </Container>
       </div>
 
       <Container className="py-12 md:py-16">
-        <div className="max-w-3xl">
-          <div className="post-body">{post.content}</div>
-          <Link href="/writing" className="mt-12 inline-block text-ui">
-            ← All writing
-          </Link>
+        <div className="flex flex-col gap-12 md:grid md:grid-cols-[minmax(0,1fr)_300px] md:items-start md:gap-18">
+          <div>
+            <div className="post-body">{post.content}</div>
+            <Link href="/writing" className="mt-12 inline-block text-ui">
+              ← All writing
+            </Link>
+          </div>
+
+          <aside className="flex flex-col gap-6 border-border md:sticky md:top-24 md:border-l md:pl-8">
+            {post.tags.length > 0 ? (
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-wide text-subtle">Tags</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-wide text-subtle">Feed</p>
+              <a href="/writing/rss.xml" className="mt-1 inline-block text-ui">
+                RSS ↗
+              </a>
+            </div>
+          </aside>
         </div>
       </Container>
     </article>

@@ -23,23 +23,46 @@ export default async function WritingIndexPage() {
       {posts.length === 0 ? (
         <p className="mt-10 text-body text-muted">Nothing published yet.</p>
       ) : (
-        <ul className="mt-10 flex max-w-3xl flex-col divide-y divide-border border-y border-border">
+        <ul className="mt-10 flex flex-col divide-y divide-border border-y border-border">
           {posts.map((post) => (
-            <li key={post.slug} className="py-6">
-              <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wide text-subtle">
-                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+            <li
+              key={post.slug}
+              className="grid gap-2 py-6 md:grid-cols-[150px_minmax(0,1fr)_auto] md:gap-8"
+            >
+              <div className="flex flex-col items-start gap-2 md:pt-2">
+                <time
+                  dateTime={post.date}
+                  className="font-mono text-[11px] uppercase tracking-wide text-subtle"
+                >
+                  {formatPostDate(post.date)}
+                </time>
                 {post.draft ? (
-                  <span className="rounded-full border border-accent px-2 py-px text-accent">
+                  <span className="rounded-full border border-accent px-2 py-px font-mono text-[11px] uppercase tracking-wide text-accent">
                     Draft — dev only
                   </span>
                 ) : null}
-              </p>
-              <h2 className="mt-2 font-display text-card-title font-semibold leading-tight">
-                <Link href={`/writing/${post.slug}`} className="text-ink no-underline hover:underline">
-                  {post.title}
-                </Link>
-              </h2>
-              <p className="mt-2 text-support text-muted">{post.summary}</p>
+              </div>
+              <div>
+                <h2 className="font-display text-card-title font-semibold leading-tight">
+                  <Link
+                    href={`/writing/${post.slug}`}
+                    className="text-ink no-underline hover:underline"
+                  >
+                    {post.title}
+                  </Link>
+                </h2>
+                <p className="mt-2 max-w-3xl text-support text-muted">{post.summary}</p>
+              </div>
+              <div className="flex flex-wrap content-start gap-2 md:max-w-56 md:justify-end md:pt-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </li>
           ))}
         </ul>
