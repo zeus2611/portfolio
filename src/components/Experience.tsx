@@ -6,9 +6,9 @@ export function Experience() {
   return (
     <section id="exp" className="border-t border-border py-16 md:py-22">
       <Container>
-        <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
+        <h2 className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
           Experience
-        </p>
+        </h2>
         <p className="mt-3 font-mono text-ui text-subtle">{graphCaption}</p>
       </Container>
       {/* Wider than the page container on purpose: the graph's viewBox is

@@ -5,9 +5,9 @@ export function OpenSource() {
   return (
     <section id="oss" className="border-t border-border py-16 md:py-22">
       <Container>
-        <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
+        <h2 className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
           Open source
-        </p>
+        </h2>
         <div className="mt-8 flex flex-col divide-y divide-border">
           {ossItems.map((item) => (
             <div

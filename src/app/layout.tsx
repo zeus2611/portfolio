@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SkipLink } from "@/components/SkipLink";
+import { identity } from "@/content/profile";
+import { SITE_NAME, siteDescription } from "@/lib/seo";
 import "./globals.css";
-import { fraunces, geist, jetbrainsMono } from "./fonts";
+import { fraunces, frauncesItalic, geist, jetbrainsMono } from "./fonts";
 
 const themeInitScript = `(function () {
   try {
@@ -20,8 +23,11 @@ const themeInitScript = `(function () {
 })();`;
 
 export const metadata: Metadata = {
-  title: "Nischay",
-  description: "Software engineer working on AI products and developer tools.",
+  metadataBase: new URL(identity.domain),
+  title: { default: `${SITE_NAME} — Software engineer`, template: `%s — ${SITE_NAME}` },
+  description: siteDescription,
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -32,12 +38,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
-        className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${fraunces.variable} ${frauncesItalic.variable} ${geist.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <SkipLink />
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

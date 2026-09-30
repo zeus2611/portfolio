@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { TodoNote } from "@/components/TodoNote";
 import { workItems } from "@/content/work";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return workItems.map((item) => ({ slug: item.slug }));
@@ -21,10 +22,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const item = await getItem(slug);
   if (!item) return {};
-  return {
-    title: `${item.title} — Nischay`,
+  return pageMetadata({
+    title: item.title,
     description: item.tagline,
-  };
+    path: `/work/${item.slug}`,
+    type: "article",
+  });
 }
 
 export default async function CaseStudyPage({

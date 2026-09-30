@@ -15,7 +15,7 @@ export function Hero() {
           {hero.heading}
         </h1>
         <p className="mt-6 max-w-180 text-hero-line leading-snug text-ink">
-          {hero.line} <em className="font-display italic text-accent">{hero.accentPhrase}</em>
+          {hero.line} <em className="font-display-italic italic text-accent">{hero.accentPhrase}</em>
         </p>
         <nav aria-label="Profile links" className="mt-8 flex flex-wrap gap-6 text-ui">
           <a href={identity.github}>GitHub ↗</a>

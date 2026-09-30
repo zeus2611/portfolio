@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
 import { identity } from "@/content/profile";
+import { pageMetadata } from "@/lib/seo";
 import { formatPostDate, getPost, getPosts } from "@/lib/writing";
 
 export const dynamicParams = false;
@@ -26,9 +27,18 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
   return {
-    title: `${post.title} — ${identity.name}`,
-    description: post.summary,
-    alternates: { types: { "application/rss+xml": `${identity.domain}/writing/rss.xml` } },
+    ...pageMetadata({
+      title: post.title,
+      description: post.summary,
+      path: `/writing/${post.slug}`,
+      type: "article",
+      // A dev-only draft must never be indexable if it somehow gets served.
+      noindex: post.draft,
+    }),
+    alternates: {
+      canonical: `/writing/${post.slug}`,
+      types: { "application/rss+xml": `${identity.domain}/writing/rss.xml` },
+    },
   };
 }
 

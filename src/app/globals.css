@@ -50,6 +50,7 @@
   --color-accent-ink: var(--accent-ink);
 
   --font-display: var(--font-fraunces);
+  --font-display-italic: var(--font-fraunces-italic);
   --font-sans: var(--font-geist);
   --font-mono: var(--font-jetbrains-mono);
 

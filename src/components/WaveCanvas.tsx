@@ -1,49 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { heightField, project, STATIC_FRAME_T, waveGrid } from "@/lib/wave";
 
-const X_MIN = -11;
-const X_MAX = 11;
-const D_MIN = -7;
-const D_MAX = 4.5;
-const CAM_HEIGHT = 3;
-const CAM_DIST = 9;
-const FOV_DEG = 55;
 const MAX_DPR = 1.5;
 const MAX_FPS = 30;
 const FRAME_INTERVAL = 1000 / MAX_FPS;
-const STATIC_FRAME_T = 2.2;
 const MOBILE_BREAKPOINT = 768;
-
-function heightField(x: number, d: number, t: number): number {
-  return (
-    0.45 * Math.sin(0.4 * x + 0.9 * t) +
-    0.3 * Math.sin(0.5 * d + 0.65 * t) +
-    0.2 * Math.sin(0.28 * (x + d) + 0.5 * t)
-  );
-}
-
-function linspace(min: number, max: number, steps: number): number[] {
-  const points: number[] = [];
-  for (let i = 0; i <= steps; i++) {
-    points.push(min + ((max - min) * i) / steps);
-  }
-  return points;
-}
-
-const CAMERA_PITCH = Math.atan2(CAM_HEIGHT, CAM_DIST);
-const HALF_FOV = (FOV_DEG / 2) * (Math.PI / 180);
-
-function project(x: number, d: number, z: number, width: number, height: number): [number, number] {
-  const up = -1.8 + z - CAM_HEIGHT;
-  const fw = CAM_DIST - d;
-  const up2 = up * Math.cos(CAMERA_PITCH) + fw * Math.sin(CAMERA_PITCH);
-  const fw2 = fw * Math.cos(CAMERA_PITCH) - up * Math.sin(CAMERA_PITCH);
-  const focal = height / 2 / Math.tan(HALF_FOV);
-  const sx = width / 2 + (focal * x) / fw2;
-  const sy = height / 2 - (focal * up2) / fw2 + 60;
-  return [sx, sy];
-}
 
 /**
  * A wireframe terrain grid rendered as a Canvas 2D animation — see
@@ -75,8 +38,7 @@ export function WaveCanvas() {
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       const mobile = window.innerWidth < MOBILE_BREAKPOINT;
-      xs = linspace(X_MIN, X_MAX, mobile ? 22 : 44);
-      ds = linspace(D_MIN, D_MAX, mobile ? 11 : 22);
+      ({ xs, ds } = waveGrid(mobile));
     }
 
     // One Path2D per frame, one stroke() call — 68 separate stroke() calls

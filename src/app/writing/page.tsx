@@ -2,13 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/Container";
 import { identity } from "@/content/profile";
-import { formatPostDate, getPosts } from "@/lib/writing";
+import { pageMetadata } from "@/lib/seo";
+import { formatPostDate, getPosts, getPublishedPosts } from "@/lib/writing";
 
-export const metadata: Metadata = {
-  title: `Writing — ${identity.name}`,
-  description: "Engineering write-ups.",
-  alternates: { types: { "application/rss+xml": `${identity.domain}/writing/rss.xml` } },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const published = await getPublishedPosts();
+  return {
+    ...pageMetadata({
+      title: "Writing",
+      description: "Engineering write-ups.",
+      path: "/writing",
+      // Nothing to index until the first post is published.
+      noindex: published.length === 0,
+    }),
+    alternates: {
+      canonical: "/writing",
+      types: { "application/rss+xml": `${identity.domain}/writing/rss.xml` },
+    },
+  };
+}
 
 export default async function WritingIndexPage() {
   const posts = await getPosts();

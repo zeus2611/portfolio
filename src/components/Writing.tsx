@@ -11,7 +11,7 @@ export async function Writing() {
     <section id="writing" className="border-t border-border py-16 md:py-22">
       <Container>
         <div className="flex items-baseline justify-between">
-          <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">Writing</p>
+          <h2 className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">Writing</h2>
           <Link href="/writing" className="text-ui">
             All writing →
           </Link>

@@ -7,9 +7,9 @@ export function SelectedWork() {
     <section id="work" className="border-t border-border py-16 md:py-22">
       <Container>
         <div className="flex items-baseline justify-between">
-          <p className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
+          <h2 className="font-mono text-eyebrow uppercase tracking-[0.16em] text-accent">
             Selected work
-          </p>
+          </h2>
           <p className="font-mono text-eyebrow text-subtle">{workItems.length} case studies</p>
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

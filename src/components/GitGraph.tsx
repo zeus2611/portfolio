@@ -1,6 +1,3 @@
-"use client";
-
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
   bridgetalkBranch,
   mainCommits,
@@ -8,6 +5,7 @@ import {
   mtechBranch,
   openSourceBranch,
 } from "@/content/timeline";
+import { GraphBehavior } from "./GraphBehavior";
 
 const VIEW_W = 1280;
 const VIEW_H = 440;
@@ -57,9 +55,11 @@ const YEARS = (() => {
   return years;
 })();
 
-type TooltipState = { x: number; y: number; heading: string; body: string } | null;
-
-/** A focusable, hoverable graph node with a tooltip — a circle, or an <a> when `href` is given. */
+/**
+ * A focusable graph node. Tooltip behaviour lives in GraphBehavior, which
+ * reads the data-tip-* attributes by event delegation, so this stays a
+ * plain server-rendered element with nothing to hydrate.
+ */
 function Node({
   cx,
   cy,
@@ -71,8 +71,6 @@ function Node({
   heading,
   body,
   href,
-  onActivate,
-  onDeactivate,
 }: {
   cx: number;
   cy: number;
@@ -84,19 +82,8 @@ function Node({
   heading: string;
   body: string;
   href?: string;
-  onActivate: (e: React.SyntheticEvent, heading: string, body: string) => void;
-  onDeactivate: () => void;
 }) {
-  const shared = {
-    onMouseEnter: (e: React.MouseEvent) => onActivate(e, heading, body),
-    onMouseLeave: onDeactivate,
-    onFocus: (e: React.FocusEvent) => onActivate(e, heading, body),
-    onBlur: onDeactivate,
-    onKeyDown: (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") onDeactivate();
-    },
-  };
-
+  const tip = { "data-tip-heading": heading, "data-tip-body": body };
   const visual = (
     <>
       <circle cx={cx} cy={cy} r={r + 6} fill="transparent" />
@@ -106,111 +93,33 @@ function Node({
 
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} {...shared}>
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} {...tip}>
         {visual}
       </a>
     );
   }
 
   return (
-    <g tabIndex={0} role="button" aria-label={label} {...shared}>
+    <g tabIndex={0} role="button" aria-label={label} {...tip}>
       {visual}
     </g>
   );
 }
 
-function useDrawOnView<T extends SVGElement>() {
-  const containerRef = useRef<SVGSVGElement>(null);
-  const pathRefs = useRef<(T | null)[]>([]);
-  const nextIndexRef = useRef(0);
-  // Lazy init (not an effect) so the reduced-motion case never needs a
-  // synchronous setState-in-effect just to flip a flag that was already
-  // knowable at mount.
-  const [drawn, setDrawn] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
-
-  // Stable identity so React only invokes this at mount/unmount (commit
-  // time), never mid-render — indices are assigned once, in JSX order.
-  const registerPath = useCallback((el: T | null) => {
-    if (!el) return;
-    pathRefs.current[nextIndexRef.current] = el;
-    nextIndexRef.current += 1;
-  }, []);
-
-  useEffect(() => {
-    if (drawn) return;
-    const container = containerRef.current;
-    if (!container) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setDrawn(true);
-            observer.disconnect();
-          }
-        }
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [drawn]);
-
-  useEffect(() => {
-    if (!drawn) return;
-    pathRefs.current.forEach((path) => {
-      if (!path || !("getTotalLength" in path)) return;
-      const length = (path as unknown as SVGPathElement).getTotalLength();
-      path.style.strokeDasharray = `${length}`;
-      path.style.strokeDashoffset = `${length}`;
-      path.style.transition = "none";
-      // Force a layout flush so the browser registers the starting offset
-      // before the transition below animates it back to 0.
-      path.getBoundingClientRect();
-      path.style.transition = "stroke-dashoffset 1.8s ease-out";
-      path.style.strokeDashoffset = "0";
-    });
-  }, [drawn]);
-
-  return { containerRef, registerPath, drawn };
-}
-
 export function GitGraph() {
-  const [tooltip, setTooltip] = useState<TooltipState>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const { containerRef, registerPath, drawn } = useDrawOnView<SVGPathElement>();
-
-  function activate(e: React.SyntheticEvent, heading: string, body: string) {
-    const wrapper = wrapperRef.current;
-    if (!wrapper) return;
-    const targetRect = (e.currentTarget as Element).getBoundingClientRect();
-    const wrapperRect = wrapper.getBoundingClientRect();
-    setTooltip({
-      x: targetRect.left - wrapperRect.left + targetRect.width / 2,
-      y: targetRect.top - wrapperRect.top,
-      heading,
-      body,
-    });
-  }
-  function deactivate() {
-    setTooltip(null);
-  }
-
   const headX = xScale(headCommit.date);
   // Open branches (still active) run past the reading column into the right
   // bleed, suggesting they continue beyond "now" rather than stopping dead.
   const openEndX = INNER_RIGHT + 40;
 
   return (
-    <div ref={wrapperRef} className="relative">
+    <GraphBehavior>
       {/* Desktop / horizontal */}
       <svg
-        ref={containerRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        role="img"
+        // "group", not "img": img makes its children presentational, but the
+        // nodes inside are focusable (invalid ARIA; axe: nested-interactive).
+        role="group"
         aria-label={buildAriaLabel()}
         className="hidden w-full md:block"
       >
@@ -247,7 +156,7 @@ export function GitGraph() {
 
         {/* Main line */}
         <path
-          ref={registerPath}
+          data-draw
           d={`M ${xScale(mainCommits[0].date)} ${MAIN_Y} H ${headX}`}
           stroke="var(--ink)"
           strokeWidth={2.5}
@@ -256,7 +165,7 @@ export function GitGraph() {
 
         {/* bridgetalk branch (closed) */}
         <path
-          ref={registerPath}
+          data-draw
           d={closedBranchPath(xScale(bridgetalkBranch.from), xScale(bridgetalkBranch.to), LANE_Y.bridgetalk)}
           stroke="var(--ink)"
           strokeOpacity={0.8}
@@ -266,7 +175,7 @@ export function GitGraph() {
 
         {/* open-source branch (open) */}
         <path
-          ref={registerPath}
+          data-draw
           d={openBranchPath(xScale(openSourceBranch.from), openEndX - 8, LANE_Y["open-source"])}
           stroke="var(--accent)"
           strokeWidth={2}
@@ -277,22 +186,20 @@ export function GitGraph() {
           fill="var(--accent)"
         />
 
-        {/* mtech branch (open, dashed) — kept out of the draw-reveal path
-            registry below since that trick overwrites strokeDasharray, which
-            would erase this branch's decorative dash pattern. Faded in via
-            opacity instead, still gated on the same `drawn` state. */}
+        {/* mtech branch (open, dashed) — faded in (data-fade) rather than dash-drawn,
+            since the dash-reveal trick would overwrite this branch's own "6 5" pattern. */}
         <path
           d={openBranchPath(xScale(mtechBranch.from), openEndX - 8, LANE_Y.mtech)}
           stroke="var(--subtle)"
           strokeWidth={2}
           strokeDasharray="6 5"
           fill="none"
-          style={{ opacity: drawn ? 1 : 0, transition: "opacity 1.8s ease-out" }}
+          data-fade
         />
         <polygon
           points={`${openEndX - 8},${LANE_Y.mtech - 5} ${openEndX},${LANE_Y.mtech} ${openEndX - 8},${LANE_Y.mtech + 5}`}
           fill="var(--subtle)"
-          style={{ opacity: drawn ? 1 : 0, transition: "opacity 1.8s ease-out" }}
+          data-fade
         />
 
         {/* Branch labels */}
@@ -354,8 +261,6 @@ export function GitGraph() {
                   label={`HEAD — ${commit.label}, ${commit.date}: ${commit.tooltip}`}
                   heading={`HEAD · ${commit.date}`}
                   body={commit.tooltip}
-                  onActivate={activate}
-                  onDeactivate={deactivate}
                 />
                 <text x={x + 14} y={MAIN_Y + 4} className="graph-eyebrow" fill="var(--accent)">
                   HEAD
@@ -377,8 +282,6 @@ export function GitGraph() {
                 label={`${commit.label}, ${commit.date}: ${commit.tooltip}`}
                 heading={`${commit.label} · ${commit.date}`}
                 body={commit.tooltip}
-                onActivate={activate}
-                onDeactivate={deactivate}
               />
               {isSupista ? (
                 <>
@@ -413,8 +316,6 @@ export function GitGraph() {
             heading={`${pr.repo} ${pr.pr} · ${pr.date}`}
             body={pr.title}
             href={pr.href}
-            onActivate={activate}
-            onDeactivate={deactivate}
           />
         ))}
 
@@ -431,8 +332,6 @@ export function GitGraph() {
           label={`bridgetalk, ${bridgetalkBranch.from} to ${bridgetalkBranch.to}: ${bridgetalkBranch.tooltip}`}
           heading={`bridgetalk · ${bridgetalkBranch.from} – ${bridgetalkBranch.to}`}
           body={bridgetalkBranch.tooltip}
-          onActivate={activate}
-          onDeactivate={deactivate}
         />
         <Node
           cx={xScale(mtechBranch.from) + BRANCH_CURVE_RUN}
@@ -444,40 +343,19 @@ export function GitGraph() {
           label={`m.tech, since ${mtechBranch.from}: ${mtechBranch.tooltip}`}
           heading={`m.tech · nit rourkela`}
           body={mtechBranch.tooltip}
-          onActivate={activate}
-          onDeactivate={deactivate}
         />
       </svg>
 
       {/* Mobile / vertical */}
-      <MobileGraph onActivate={activate} onDeactivate={deactivate} />
-
-      {tooltip ? (
-        <div
-          role="tooltip"
-          className="pointer-events-none absolute z-20 w-56 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-lg border border-border bg-surface p-3 text-base shadow-sm"
-          style={{ left: tooltip.x, top: tooltip.y }}
-        >
-          <p className="font-mono text-xs uppercase tracking-wide text-subtle">
-            {tooltip.heading}
-          </p>
-          <p className="mt-1 text-ink">{tooltip.body}</p>
-        </div>
-      ) : null}
+      <MobileGraph />
 
       <AccessibleList />
-    </div>
+    </GraphBehavior>
   );
 }
 
 /** Collapsed vertical layout for < 768px: newest first, HEAD at the top. */
-function MobileGraph({
-  onActivate,
-  onDeactivate,
-}: {
-  onActivate: (e: React.SyntheticEvent, heading: string, body: string) => void;
-  onDeactivate: () => void;
-}) {
+function MobileGraph() {
   const rows = [
     { key: "head", kind: "main" as const, commit: headCommit },
     ...[...mainCommits].filter((c) => !c.head).reverse().map((commit) => ({
@@ -527,11 +405,8 @@ function MobileGraph({
               <button
                 type="button"
                 className="text-left"
-                onFocus={(e) => onActivate(e, `${row.commit.label} · ${row.commit.date}`, row.commit.tooltip)}
-                onBlur={onDeactivate}
-                onClick={(e) =>
-                  onActivate(e, `${row.commit.label} · ${row.commit.date}`, row.commit.tooltip)
-                }
+                data-tip-heading={`${row.commit.label} · ${row.commit.date}`}
+                data-tip-body={row.commit.tooltip}
               >
                 <p className="font-mono text-sm text-subtle">{row.commit.date}</p>
                 <p className="text-base text-ink">
@@ -543,9 +418,8 @@ function MobileGraph({
               <button
                 type="button"
                 className="text-left"
-                onFocus={(e) => onActivate(e, row.label, row.tooltip)}
-                onBlur={onDeactivate}
-                onClick={(e) => onActivate(e, row.label, row.tooltip)}
+                data-tip-heading={row.label}
+                data-tip-body={row.tooltip}
               >
                 <p className="font-mono text-sm text-accent">{row.label}</p>
                 <p className="text-base text-muted">{row.sub}</p>
