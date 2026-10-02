@@ -1,5 +1,3 @@
-import { isTodo, todo, type Todo } from "./todo";
-
 export const graphCaption = "$ git log --graph --all --author=nischay";
 
 export const currentlyLine =
@@ -161,15 +159,10 @@ export const openSourceBranch = {
   ] satisfies readonly OssPr[],
 } as const;
 
-/** TODO (owner): expected graduation year. */
-export const mtechEndYear: number | Todo = todo("expected graduation year");
-
-const mtechYears = isTodo(mtechEndYear)
-  ? `2025–present${process.env.NODE_ENV !== "production" ? " [TODO: confirm end year]" : ""}`
-  : `2025–${mtechEndYear}`;
+export const mtechEnd = { month: "May", year: 2027 } as const;
 
 export const mtechBranch = {
   from: "2025-08",
   label: "m.tech · nit rourkela",
-  tooltip: `M.Tech in Signal & Image Processing, NIT Rourkela (${mtechYears}).`,
+  tooltip: `M.Tech in Signal & Image Processing, NIT Rourkela (2025 – ${mtechEnd.month} ${mtechEnd.year}, expected).`,
 } as const;

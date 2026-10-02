@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { education } from "@/content/education";
 import { hero, identity } from "@/content/profile";
-import { isTodo } from "@/content/todo";
 
 export const SITE_NAME = identity.name;
 
@@ -44,8 +43,8 @@ export const siteDescription = `${hero.line} ${hero.accentPhrase}`;
 
 /** schema.org Person for Home, built from the same content the page renders. */
 export function personJsonLd(): Record<string, unknown> {
-  const finished = education.filter((row) => !isTodo(row.endYear));
-  const ongoing = education.filter((row) => isTodo(row.endYear));
+  const finished = education.filter((row) => !row.expected);
+  const ongoing = education.filter((row) => row.expected);
 
   return {
     "@context": "https://schema.org",

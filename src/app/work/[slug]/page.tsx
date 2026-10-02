@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/Container";
-import { TodoNote } from "@/components/TodoNote";
 import { workItems } from "@/content/work";
 import { pageMetadata } from "@/lib/seo";
 
@@ -58,7 +57,6 @@ export default async function CaseStudyPage({
               {tag}
             </span>
           ))}
-          {item.sidebar.stackTodo ? <TodoNote>{item.sidebar.stackTodo.note}</TodoNote> : null}
         </span>
       ),
     },

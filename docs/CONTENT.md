@@ -12,7 +12,7 @@ omit it in production, and never invent a value. Transcribe this into typed data
 - GitHub: https://github.com/zeus2611
 - LinkedIn: https://www.linkedin.com/in/nischay-2604
 - Domain: https://www.nischay.live
-- Résumé: `/resume.pdf` (TODO: the owner will add the file)
+- Résumé: `/resume.pdf`
 - Certification (footer): Google Cloud Professional Cloud Architect. List only this one; the others
   have expired.
 
@@ -73,7 +73,7 @@ Branch labels: "open-source"; under the early cluster, "transformers · activist
 cluster, "WordPress AI · 6 merged".
 
 **mtech** branch: from 2025-08, still open, dashed. Label: m.tech · nit rourkela. Tooltip: M.Tech in
-Signal & Image Processing, NIT Rourkela (2025–TODO: expected year).
+Signal & Image Processing, NIT Rourkela (2025 – May 2027, expected).
 
 Accessible list (visually hidden `<ol>`): one item per main commit, per branch, and per PR, in date
 order, using the tooltip text.
@@ -158,8 +158,7 @@ order, using the tooltip text.
   (B2B) · a multi-tenant backend with role-based access control · AI speaking feedback · in-app
   purchases.
 - **Sidebar:** ROLE Founding engineer · TIMELINE Jan 2025 – Jun 2026 · PLATFORMS iOS, Android ·
-  STACK Flutter, Dart, FastAPI, Appwrite, Firebase, GCP, OpenAI (TODO: confirm whether Deepgram
-  should be listed) · LINKS https://apps.apple.com/us/app/bridgetalk/id6743174081,
+  STACK Flutter, Dart, FastAPI, Appwrite, Firebase, GCP, OpenAI, Deepgram · LINKS https://apps.apple.com/us/app/bridgetalk/id6743174081,
   https://apps.apple.com/us/app/bridgetalk-ai-enterprise/id6749461827,
   https://play.google.com/store/apps/details?id=com.bridgetalk.beta
 - Closed source, so no repo link. Leave out marketing, video and SEO work; that was the wider team's.
@@ -186,7 +185,7 @@ appwrite/templates #347. They weren't merged.
 
 ## Education (graph tooltip plus JSON-LD)
 
-- M.Tech, Signal & Image Processing, NIT Rourkela · 2025–TODO
+- M.Tech, Signal & Image Processing, NIT Rourkela · 2025–2027 (expected May 2027)
 - B.Tech, Electronics & Communication Engineering, Shri Mata Vaishno Devi University · 2020–2024
 
 ## Writing (hidden until the first post is published)

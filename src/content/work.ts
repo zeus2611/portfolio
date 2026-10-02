@@ -1,5 +1,3 @@
-import { todo, type Todo } from "./todo";
-
 export type Challenge = {
   title: string;
   body: string;
@@ -13,8 +11,6 @@ export type WorkSidebar = {
   release?: string;
   platforms?: string;
   stack: readonly string[];
-  /** A stack item whose inclusion the owner hasn't confirmed yet. */
-  stackTodo?: Todo;
   links: readonly { label: string; href: string }[];
 };
 
@@ -167,8 +163,7 @@ export const workItems: readonly WorkItem[] = [
       role: "Founding engineer",
       timeline: "Jan 2025 – Jun 2026",
       platforms: "iOS, Android",
-      stack: ["Flutter", "Dart", "FastAPI", "Appwrite", "Firebase", "GCP", "OpenAI"],
-      stackTodo: todo("confirm whether Deepgram should be listed"),
+      stack: ["Flutter", "Dart", "FastAPI", "Appwrite", "Firebase", "GCP", "OpenAI", "Deepgram"],
       links: [
         {
           label: "App Store (consumer)",

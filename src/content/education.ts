@@ -1,12 +1,13 @@
-import { mtechEndYear } from "./timeline";
-import type { Todo } from "./todo";
+import { mtechEnd } from "./timeline";
 
 export type EducationRow = {
   degree: string;
   field: string;
   org: string;
   startYear: number;
-  endYear: number | Todo;
+  endYear: number;
+  /** endYear is an expected date: the degree is still in progress. */
+  expected?: true;
 };
 
 export const education: readonly EducationRow[] = [
@@ -15,7 +16,8 @@ export const education: readonly EducationRow[] = [
     field: "Signal & Image Processing",
     org: "NIT Rourkela",
     startYear: 2025,
-    endYear: mtechEndYear,
+    endYear: mtechEnd.year,
+    expected: true,
   },
   {
     degree: "B.Tech",
