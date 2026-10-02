@@ -1,0 +1,44 @@
+---
+title: "Pipeline test post"
+date: "2026-09-29"
+summary: "A dev-only fixture that exercises every element the writing pipeline renders. Not a real post."
+tags: ["meta"]
+draft: true
+---
+
+This post exists only to check the writing pipeline in development. It has `draft: true`, so it must never appear in the production build, the RSS feed, the sitemap or the navigation.
+
+## Headings and text
+
+Body copy uses the reading column. Here is an inline `code` span, a [relative link](/writing), and an [external link](https://nextjs.org).
+
+### A third-level heading
+
+- An unordered list item
+- Another item with `inline code`
+- A third item
+
+1. An ordered list item
+2. A second item
+
+> A blockquote, used for pull quotes or asides.
+
+---
+
+## Code blocks
+
+```ts
+interface Post {
+  slug: string;
+  draft: boolean;
+}
+
+export function isPublished(post: Post): boolean {
+  // Drafts are dev-only.
+  return !post.draft;
+}
+```
+
+```bash
+pnpm lint && pnpm typecheck && pnpm build
+```

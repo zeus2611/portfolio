@@ -1,192 +1,60 @@
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import React, { ReactNode } from "react";
+import type { ComponentProps } from "react";
+import type { MDXComponents } from "mdx/types";
+import { CopyButton } from "./CopyButton";
 
-import { 
-  Heading,
-  HeadingLink,
-  Text,
-  InlineCode,
-  CodeBlock,
-  TextProps,
-  MediaProps,
-  Accordion,
-  AccordionGroup,
-  Table,
-  Feedback,
-  Button,
-  Card,
-  Grid,
-  Row,
-  Column,
-  Icon,
-  Media,
-  SmartLink,
-} from "@once-ui-system/core";
-
-type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-  children: ReactNode;
-};
-
-function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  if (href.startsWith("/")) {
-    return (
-      <SmartLink href={href} {...props}>
-        {children}
-      </SmartLink>
-    );
-  }
-
-  if (href.startsWith("#")) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  }
-
+// Inline `code` is styled in globals.css (.post-body :not(pre) > code) rather
+// than here, because Shiki emits its own <code> inside <pre> and a `code`
+// component override would hit both.
+function Pre({ className = "", ...props }: ComponentProps<"pre">) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+    <div className="group relative my-6">
+      {/* tabIndex so keyboard users can scroll long lines */}
+      <pre
+        {...props}
+        tabIndex={0}
+        className={`${className} overflow-x-auto rounded-lg border border-border p-4 font-mono text-[14px] leading-relaxed`}
+      />
+      <CopyButton />
+    </div>
+  );
+}
+
+function ExternalAware({ href = "", children, ...props }: ComponentProps<"a">) {
+  const external = /^https?:\/\//.test(href);
+  return (
+    <a
+      href={href}
+      {...props}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
       {children}
+      {external ? " ↗" : null}
     </a>
   );
 }
 
-function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
-  if (!src) {
-    console.error("Media requires a valid 'src' property.");
-    return null;
-  }
-
-  return (
-    <Media
-      marginTop="8"
-      marginBottom="16"
-      enlarge
-      radius="m"
-      aspectRatio="16 / 9"
-      border="neutral-alpha-medium"
-      sizes="(max-width: 960px) 100vw, 960px"
-      alt={alt}
-      src={src}
+export const mdxComponents: MDXComponents = {
+  h2: (props) => (
+    <h2 className="mt-12 mb-4 font-display text-h2 font-semibold text-ink" {...props} />
+  ),
+  h3: (props) => <h3 className="mt-8 mb-3 text-h3 font-medium text-ink" {...props} />,
+  p: (props) => <p className="my-5 text-body leading-relaxed text-ink" {...props} />,
+  ul: (props) => (
+    <ul className="my-5 list-disc space-y-2 pl-6 text-body text-ink marker:text-muted" {...props} />
+  ),
+  ol: (props) => (
+    <ol
+      className="my-5 list-decimal space-y-2 pl-6 text-body text-ink marker:text-muted"
       {...props}
     />
-  );
-}
-
-function slugify(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/&/g, "-and-") // Replace & with 'and'
-    .replace(/[^\w\-]+/g, "") // Remove all non-word characters except for -
-    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
-}
-
-function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({ children, ...props }: Omit<React.ComponentProps<typeof HeadingLink>, 'as' | 'id'>) => {
-    const slug = slugify(children as string);
-    return (
-      <HeadingLink
-        marginTop="24"
-        marginBottom="12"
-        as={as}
-        id={slug}
-        {...props}
-      >
-        {children}
-      </HeadingLink>
-    );
-  };
-
-  CustomHeading.displayName = `${as}`;
-
-  return CustomHeading;
-}
-
-function createParagraph({ children }: TextProps) {
-  return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-medium"
-      marginTop="8"
-      marginBottom="12"
-    >
-      {children}
-    </Text>
-  );
-}
-
-function createInlineCode({ children }: { children: ReactNode }) {
-  return <InlineCode>{children}</InlineCode>;
-}
-
-function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
-    const { className, children } = props.children.props;
-    
-    // Extract language from className (format: language-xxx)
-    const language = className.replace('language-', '');
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
-    
-    return (
-      <CodeBlock
-        marginTop="8"
-        marginBottom="16"
-        codes={[
-          {
-            code: children,
-            language,
-            label
-          }
-        ]}
-        copyButton={true}
-      />
-    );
-  }
-  
-  // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
-}
-
-const components = {
-  p: createParagraph as any,
-  h1: createHeading("h1") as any,
-  h2: createHeading("h2") as any,
-  h3: createHeading("h3") as any,
-  h4: createHeading("h4") as any,
-  h5: createHeading("h5") as any,
-  h6: createHeading("h6") as any,
-  img: createImage as any,
-  a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  Heading,
-  Text,
-  CodeBlock,
-  InlineCode,
-  Accordion,
-  AccordionGroup,
-  Table,
-  Feedback,
-  Button,
-  Card,
-  Grid,
-  Row,
-  Column,
-  Icon,
-  Media,
-  SmartLink,
+  ),
+  blockquote: (props) => (
+    <blockquote
+      className="my-6 border-l-2 border-accent pl-5 text-body text-muted italic"
+      {...props}
+    />
+  ),
+  hr: (props) => <hr className="my-10 border-border" {...props} />,
+  a: ExternalAware,
+  pre: Pre,
 };
-
-type CustomMDXProps = MDXRemoteProps & {
-  components?: typeof components;
-};
-
-export function CustomMDX(props: CustomMDXProps) {
-  return (
-    <MDXRemote {...props} components={{ ...components, ...(props.components || {}) }} />
-  );
-}

@@ -1,23 +1,20 @@
-import { getPosts } from "@/utils/utils";
-import { baseURL, routes as routesConfig } from "@/resources";
+import type { MetadataRoute } from "next";
+import { identity } from "@/content/profile";
+import { workItems } from "@/content/work";
+import { getPublishedPosts } from "@/lib/writing";
 
-export default async function sitemap() {
-  const blogs = getPosts(["src", "app", "blog", "posts"]).map((post) => ({
-    url: `${baseURL}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
+export const dynamic = "force-static";
 
-  const works = getPosts(["src", "app", "work", "projects"]).map((post) => ({
-    url: `${baseURL}/work/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getPublishedPosts();
+  const url = (path: string) => `${identity.domain}${path}`;
 
-  const activeRoutes = Object.keys(routesConfig).filter((route) => routesConfig[route as keyof typeof routesConfig]);
-
-  const routes = activeRoutes.map((route) => ({
-    url: `${baseURL}${route !== "/" ? route : ""}`,
-    lastModified: new Date().toISOString().split("T")[0],
-  }));
-
-  return [...routes, ...blogs, ...works];
+  return [
+    // No trailing slash, to match the canonical URL Next emits for the root.
+    { url: identity.domain },
+    ...workItems.map((item) => ({ url: url(`/work/${item.slug}`) })),
+    // The writing index is listed only once it has something on it.
+    ...(posts.length > 0 ? [{ url: url("/writing") }] : []),
+    ...posts.map((post) => ({ url: url(`/writing/${post.slug}`), lastModified: post.date })),
+  ];
 }

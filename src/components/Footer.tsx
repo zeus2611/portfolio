@@ -1,48 +1,25 @@
-import { Flex, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { person, social } from "@/resources";
-import styles from "./Footer.module.scss";
+import { certification, identity } from "@/content/profile";
+import { Container } from "./Container";
 
-export const Footer = () => {
-  const currentYear = new Date().getFullYear();
+const REPO_URL = "https://github.com/zeus2611/portfolio";
+
+export function Footer() {
+  const year = new Date().getFullYear();
 
   return (
-    <Flex
-      as="footer"
-      fillWidth
-      padding="8"
-      horizontal="center"
-      mobileDirection="column"
-    >
-      <Flex
-        className={styles.mobile}
-        maxWidth="m"
-        paddingY="8"
-        paddingX="16"
-        gap="16"
-        horizontal="space-between"
-        vertical="center"
-      >
-        <Text variant="body-default-s" onBackground="neutral-strong">
-          <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
-        </Text>
-        <Flex gap="16">
-          {social.map(
-            (item) =>
-              item.link && (
-                <IconButton
-                  key={item.name}
-                  href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
-                  size="s"
-                  variant="ghost"
-                />
-              ),
-          )}
-        </Flex>
-      </Flex>
-      <Flex height="80" show="s"></Flex>
-    </Flex>
+    <footer className="border-t border-border py-10">
+      <Container>
+        <div className="flex flex-col gap-4 text-ui text-muted md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-4">
+            <a href={`mailto:${identity.email}`}>{identity.email}</a>
+            <a href={identity.github}>GitHub ↗</a>
+            <a href={identity.linkedin}>LinkedIn ↗</a>
+          </div>
+          <p>
+            © {year} · {certification.name} · <a href={REPO_URL}>Source ↗</a>
+          </p>
+        </div>
+      </Container>
+    </footer>
   );
-};
+}
